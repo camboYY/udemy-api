@@ -1,8 +1,6 @@
 spring:
   datasource:
-    username: postgres
-    url: jdbc:postgresql://db:5432/postgres
-    password: postgres
+
   jpa:
     properties:
       hibernate:
