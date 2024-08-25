@@ -26,6 +26,11 @@ public class AuthController {
         return "Welcome this endpoint is not secure";
     }
 
+    @PostMapping("/welcome2")
+    public String welcome2() {
+        return "Welcome2 this endpoint is not secure";
+    }
+
     private static final Logger logger = LogManager.getLogger(AuthController.class);
 
     private final JwtService jwtService;
