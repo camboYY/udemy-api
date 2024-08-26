@@ -3,7 +3,6 @@ package com.udemy.elearning.controllers;
 import com.udemy.elearning.dto.CategoryRequest;
 import com.udemy.elearning.mapper.CategoryResponse;
 import com.udemy.elearning.models.Category;
-import com.udemy.elearning.repository.CategoryRepository;
 import com.udemy.elearning.services.CategoryService;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
@@ -12,28 +11,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/categories")
+@RequestMapping("/api/categories")
 public class CategoryController {
-
-    private final CategoryRepository categoryRepository;
-
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
-
 
     private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService, CategoryRepository categoryRepository) {
+    public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.categoryRepository = categoryRepository;
     }
 
     @PostMapping()
@@ -44,36 +32,36 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public List<Category> getAll() {
-        return categoryRepository.findAll();
+    public ResponseEntity<List<Category>> getAll() {
+        List<Category> categoryList = categoryService.findAll();
+        return ResponseEntity.ok(categoryList);
     }
-    @GetMapping("/{id}")
-    public List<Category> getById(@PathVariable(value = "id") Integer id) {
-        return Collections.singletonList(categoryRepository.findById(id));
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable(value = "id") Long categoryId,
-                                                   @Valid @RequestBody Category categoryDetails) throws BadRequestException {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new BadRequestException("Category not found for this id :: " + categoryId));
 
-        category.setName(categoryDetails.getName());
-        category.setParentId(categoryDetails.getParentId());
-        final Category updatedCategory = categoryRepository.save(category);
-        return ResponseEntity.ok(updatedCategory);
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> getById(@PathVariable(value = "id") Long id) {
+        Category category = categoryService.findById(id);
+        return ResponseEntity.ok(category);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest) {
+        Category category = categoryService.updateCategory(id,categoryRequest);
+        CategoryResponse categoryResponse = new CategoryResponse(category);
+        return ResponseEntity.ok(categoryResponse);
     }
 
     @GetMapping("/getByParentId/{parentId}")
-    public List<Category> getAllChild(@PathVariable(value = "parentId") Integer parentId) {
-        return categoryRepository.findByParentId(parentId);
+    public ResponseEntity<List<Category>> getAllChild(@PathVariable(value = "parentId") Integer parentId) {
+        List<Category> categoryList = categoryService.findByParentId(parentId);
+        return ResponseEntity.ok(categoryList);
     }
 
     @GetMapping("/getCategoryParent/{id}")
-    public List<Category> getCategoryParent(@PathVariable(value = "id") Integer category_id) {
-        Category category_child = categoryRepository.findById(category_id);
+    public ResponseEntity<Category> getCategoryParent(@PathVariable(value = "id") Long category_id) {
+        Category category_child = categoryService.findById(category_id);
         Integer parent_category_id = category_child.getParentId();
-        return Collections.singletonList(categoryRepository.findById(parent_category_id));
+        Category categoryList = categoryService.findById(Long.valueOf(parent_category_id));
+        return ResponseEntity.ok(categoryList);
     }
-
 
 }
