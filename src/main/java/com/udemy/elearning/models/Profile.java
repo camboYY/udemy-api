@@ -1,8 +1,6 @@
 package com.udemy.elearning.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +16,23 @@ import java.util.Set;
 public class Profile {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(nullable = true)
     private String avatar;
 
-    private String firstName;
+    @Column()
+    private String nickName;
 
-    private String lastName;
-
+    @Column()
     private String workExperience;
 
+    @Column()
     private String currentWorkPlace;
+
+    @PrimaryKeyJoinColumn
+    @OneToOne
+    private User user;
 
 }

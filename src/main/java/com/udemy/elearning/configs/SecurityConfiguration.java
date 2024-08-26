@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -24,7 +25,7 @@ public class SecurityConfiguration {
     private static final String[] AUTH_WHITELIST = {
             "api/auth/welcome",
             "api/auth/login",
-            "api/auth/signup"
+            "api/auth/signup",
     };
 
 
@@ -38,12 +39,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-            http.csrf(csrf -> csrf.disable()) // Disable CSRF for stateless APIs
+            http.csrf(AbstractHttpConfigurer::disable) // Disable CSRF for stateless APIs
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(AUTH_WHITELIST).permitAll()
-                        .requestMatchers("api/auth/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers("api/auth/admin/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().permitAll() // Protect all other endpoints
+//                        .requestMatchers("api/auth/user/**").hasAuthority("ROLE_USER")
+//                        .requestMatchers("api/auth/admin/**").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated() // Protect all other endpoints
                 ).sessionManagement(sess -> sess
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
                     )
