@@ -15,4 +15,5 @@ import lombok.NoArgsConstructor;
 public class Course {
     @Id
     private  long id;
+
 }
