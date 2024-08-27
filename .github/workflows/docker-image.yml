@@ -5,6 +5,28 @@ on:
     branches: ['main']
 
 jobs:
+  spring:
+    datasource:
+      username: ${{ secrets.DOCKER_DATABASE_USERNAME }}
+      url: ${{ secrets.DOCKER_DATABASE_URL }}
+      password: ${{ secrets.DOCKER_DATABASE_PASSWORD }}
+    jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        show-sql: 'true'
+        ddl-auto: update
+    application:
+      name: e-learning
+  udemy:
+    app:
+      jwtSecret: ${{ secrets.DOCKER_JWT_SECRET }}
+      jwtExpirationMs: '60000'
+  hibernate:
+    temp:
+      use_jdbc_metadata_defaults: 'false'
+
   push_to_registry:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
