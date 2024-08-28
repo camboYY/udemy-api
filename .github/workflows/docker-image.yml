@@ -35,6 +35,6 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             docker image pull yousdocker/udemy-app-api:latest
-            docker container stop funny_lalande
-            docker container rm funny_lalande
-            docker container run -d --name funny_lalande -p 8080:8080 yousdocker/udemy-app-api
+            docker container stop udemy-con
+            docker container rm udemy-con
+            docker container run -d --name udemy-con -p 8080:8080 yousdocker/udemy-app-api
