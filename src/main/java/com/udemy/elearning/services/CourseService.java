@@ -32,6 +32,7 @@ public class CourseService {
         course.setCourseInclude(courseRequest.getCourseInclude());
         course.setCourseLearning(courseRequest.getCourseLearning());
         course.setStatus(courseRequest.getStatus());
+        course.setCategoryId(courseRequest.getCategoryId());
         course.setCreatedBy(courseRequest.getCreatedBy());
         course.setCreatedAt(courseRequest.getCreatedAt());
         course.setUpdatedAt(courseRequest.getUpdatedAt());
@@ -46,6 +47,7 @@ public class CourseService {
         course.setCourseInclude(courseRequest.getCourseInclude());
         course.setCourseLearning(courseRequest.getCourseLearning());
         course.setStatus(courseRequest.getStatus());
+        course.setCategoryId(courseRequest.getCategoryId());
         course.setCreatedBy(courseRequest.getCreatedBy());
         course.setCreatedAt(courseRequest.getCreatedAt());
         course.setUpdatedAt(courseRequest.getUpdatedAt());

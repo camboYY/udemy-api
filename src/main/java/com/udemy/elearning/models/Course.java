@@ -29,6 +29,8 @@ public class Course {
     @Column()
     private Integer status;
     @Column()
+    private Integer categoryId;
+    @Column()
     private Integer createdBy;
     @Column()
     private Date createdAt;
@@ -42,6 +44,7 @@ public class Course {
             String courseInclude,
             String courseLearning,
             Integer status,
+            Integer categoryId,
             Integer createdBy,
             Date createdAt,
             Date updatedAt
@@ -52,6 +55,7 @@ public class Course {
         this.courseInclude = courseInclude;
         this.courseLearning = courseLearning;
         this.status = status;
+        this.categoryId = categoryId;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;

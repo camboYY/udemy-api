@@ -13,6 +13,7 @@ public class CourseRequest {
     private String courseInclude;
     private  String courseLearning;
     private Integer status;
+    private Integer categoryId;
     private Integer createdBy;
     private Date createdAt;
     private Date updatedAt;

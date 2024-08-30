@@ -12,6 +12,7 @@ public class CourseResponse {
     private String courseInclude;
     private  String courseLearning;
     private Integer status;
+    private Integer categoryId;
     private Integer createdBy;
     private Date createdAt;
     private Date updatedAt;
@@ -24,6 +25,7 @@ public class CourseResponse {
         this.setCourseInclude(course.getCourseInclude());
         this.setCourseLearning(course.getCourseLearning());
         this.setStatus(course.getStatus());
+        this.setCategoryId(course.getCategoryId());
         this.setCreatedBy(course.getCreatedBy());
         this.setCreatedAt(course.getCreatedAt());
         this.setUpdatedAt(course.getUpdatedAt());
