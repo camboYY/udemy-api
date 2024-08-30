@@ -37,11 +37,25 @@ public class Course {
 
     public Course(
             String title,
-            Integer price,
+            Double price,
             Integer courseBy,
+            String courseInclude,
+            String courseLearning,
+            Integer status,
+            Integer createdBy,
+            Date createdAt,
+            Date updatedAt
     ) {
-        this.name = name;
-        this.parentId = parentId;
+        this.title = title;
+        this.price = price;
+        this.courseBy = courseBy;
+        this.courseInclude = courseInclude;
+        this.courseLearning = courseLearning;
+        this.status = status;
+        this.createdBy = createdBy;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+
     }
 
 }
