@@ -26,6 +26,8 @@ public class SecurityConfiguration {
             "api/auth/welcome",
             "api/auth/login",
             "api/auth/signup",
+            "api/categories/**",
+            "api/courses/page/**",
     };
 
 
