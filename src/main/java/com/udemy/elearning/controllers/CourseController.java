@@ -30,9 +30,9 @@ public class CourseController {
         return ResponseEntity.ok(courseResponse);
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Course>> getAll() {
-        List<Course> courseList = courseService.findAll();
+    @GetMapping("/page/{page}")
+    public ResponseEntity<List<Course>> getAll(@PathVariable(value = "page") int page) {
+        List<Course> courseList = courseService.findAll(page);
         return ResponseEntity.ok(courseList);
     }
 

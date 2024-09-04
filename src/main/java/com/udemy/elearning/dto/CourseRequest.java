@@ -3,6 +3,7 @@ package com.udemy.elearning.dto;
 import jakarta.persistence.Column;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,5 @@ public class CourseRequest {
     private Integer status;
     private Integer categoryId;
     private Integer createdBy;
-    private Date createdAt;
-    private Date updatedAt;
 
 }

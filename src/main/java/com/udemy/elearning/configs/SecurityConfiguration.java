@@ -27,7 +27,9 @@ public class SecurityConfiguration {
             "api/auth/login",
             "api/auth/signup",
             "swagger-ui/**",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "api/categories/**",
+            "api/courses/page/**",
     };
 
 
