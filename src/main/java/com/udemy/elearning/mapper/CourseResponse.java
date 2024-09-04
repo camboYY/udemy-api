@@ -2,6 +2,7 @@ package com.udemy.elearning.mapper;
 import com.udemy.elearning.models.Course;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Data
@@ -14,8 +15,6 @@ public class CourseResponse {
     private Integer status;
     private Integer categoryId;
     private Integer createdBy;
-    private Date createdAt;
-    private Date updatedAt;
     private long id;
 
     public CourseResponse(Course course){
@@ -27,9 +26,6 @@ public class CourseResponse {
         this.setStatus(course.getStatus());
         this.setCategoryId(course.getCategoryId());
         this.setCreatedBy(course.getCreatedBy());
-        this.setCreatedAt(course.getCreatedAt());
-        this.setUpdatedAt(course.getUpdatedAt());
         this.setId(course.getId());
-
     }
 }

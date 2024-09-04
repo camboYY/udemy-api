@@ -6,7 +6,8 @@ import com.udemy.elearning.models.Course;
 import com.udemy.elearning.repository.CourseRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -34,8 +35,6 @@ public class CourseService {
         course.setStatus(courseRequest.getStatus());
         course.setCategoryId(courseRequest.getCategoryId());
         course.setCreatedBy(courseRequest.getCreatedBy());
-        course.setCreatedAt(courseRequest.getCreatedAt());
-        course.setUpdatedAt(courseRequest.getUpdatedAt());
         return courseRepository.save(course);
     }
 
@@ -49,13 +48,13 @@ public class CourseService {
         course.setStatus(courseRequest.getStatus());
         course.setCategoryId(courseRequest.getCategoryId());
         course.setCreatedBy(courseRequest.getCreatedBy());
-        course.setCreatedAt(courseRequest.getCreatedAt());
-        course.setUpdatedAt(courseRequest.getUpdatedAt());
         return  courseRepository.save(course);
     }
 
-    public List<Course> findAll(){
-        return courseRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    public List<Course> findAll(int page){
+        PageRequest pageRequest = PageRequest.of((page-1), 10);
+        Page<Course> resultPage = courseRepository.findAll(pageRequest);
+        return resultPage.getContent();
     }
 
     public Course findById(Long id){
