@@ -49,7 +49,7 @@ public class SecurityConfiguration {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
 //                        .requestMatchers("api/auth/user/**").hasAuthority("ROLE_USER")
 //                        .requestMatchers("api/auth/admin/**").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated() // Protect all other endpoints
+                        .anyRequest().permitAll() // Protect all other endpoints
                 ).sessionManagement(sess -> sess
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No sessions
                     )

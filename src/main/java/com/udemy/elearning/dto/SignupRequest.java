@@ -1,8 +1,6 @@
 package com.udemy.elearning.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.Set;
@@ -13,6 +11,8 @@ public class SignupRequest {
     @Size(min = 3, max = 20)
     private String username;
 
+    @NotNull(message = "The full name is required.")
+    @NotEmpty
     private String name;
 
     @Size(max = 50)

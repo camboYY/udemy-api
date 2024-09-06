@@ -8,6 +8,7 @@ import com.udemy.elearning.models.Role;
 import com.udemy.elearning.models.User;
 import com.udemy.elearning.repository.RoleRepository;
 import com.udemy.elearning.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -43,6 +45,7 @@ public class AuthenticationService {
         this.roleRepository = roleRepository;
     }
 
+    @Transactional
     public User signup(SignupRequest signUpRequest) throws BadRequestException {
         logger.info("signUpRequest{}", signUpRequest);
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
@@ -50,11 +53,11 @@ public class AuthenticationService {
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw  new BadRequestException("Error: Email is already in use!");
+            throw new BadRequestException("Error: Email is already in use!");
         }
 
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(), passwordEncoder.encode(signUpRequest.getPassword()),
+        User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
                 signUpRequest.getPhoneNumber());
 
         Set<String> strRoles = signUpRequest.getRole();
@@ -71,41 +74,27 @@ public class AuthenticationService {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-
+                        roles.add(findRoleByName(ERole.ROLE_ADMIN));
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
+                        roles.add(findRoleByName(ERole.ROLE_MODERATOR));
                         break;
                     case "student":
-                        Role studentRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(studentRole);
-
+                        roles.add( findRoleByName(ERole.ROLE_STUDENT));
                         break;
                     case "teacher":
-                        Role teacherRole = roleRepository.findByName(ERole.ROLE_TEACHER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(teacherRole);
-
+                        roles.add(findRoleByName(ERole.ROLE_TEACHER));
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
+                     roles.add(findRoleByName(ERole.ROLE_USER));
                 }
             });
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
         return userRepository.save(user);
     }
+
 
     public User authenticate(LoginRequest input) {
         authenticationManager.authenticate(
@@ -118,4 +107,16 @@ public class AuthenticationService {
         return userRepository.findByUsername(input.getUsername())
                 .orElseThrow();
     }
+
+    private Role findRoleByName (ERole role) {
+        Optional<Role> modRole = roleRepository.findByName(role);
+        if(modRole.isEmpty()) {
+            Role newRole = new Role();
+            newRole.setName(role);
+            return newRole;
+        } else {
+          return modRole.get();
+        }
+    }
 }
+
