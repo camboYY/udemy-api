@@ -30,8 +30,8 @@ public class Course {
     private  String courseLearning;
     @Column()
     private Integer status;
-    @Transient
-    private Integer categoryId;
+    @Column()
+    private Long categoryId;
     @Column()
     private Integer createdBy;
 
@@ -39,9 +39,5 @@ public class Course {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "categoryId", nullable = false)
-    private Category category;
 
 }
