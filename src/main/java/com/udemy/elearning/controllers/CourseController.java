@@ -63,5 +63,14 @@ public class CourseController {
         CourseResponse courseResponse = new CourseResponse(course,category);
         return ResponseEntity.ok(courseResponse);
     }
-
+    @GetMapping("/getByCategoryId/{id}")
+    public ResponseEntity<List<CourseResponse>> getByCategoryId(@PathVariable(value = "id") Long id) {
+        List<Course> courseList = courseService.findByCategoryId(id);
+        List<CourseResponse> courseResponseList = new ArrayList<>();
+        for (Course course : courseList) {
+            Category category = categoryService.findById(course.getCategoryId());
+            courseResponseList.add(new CourseResponse(course,category));
+        }
+        return ResponseEntity.ok(courseResponseList);
+    }
 }
