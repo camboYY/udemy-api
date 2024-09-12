@@ -30,6 +30,8 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "api/categories/**",
             "api/courses/page/**",
+            "api/courseTags/**",
+            "api/courseLessons/**",
     };
 
 

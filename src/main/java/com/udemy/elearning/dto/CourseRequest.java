@@ -1,10 +1,6 @@
 package com.udemy.elearning.dto;
-
-import jakarta.persistence.Column;
 import lombok.Data;
 
-import java.time.Instant;
-import java.util.Date;
 
 @Data
 public class CourseRequest {
@@ -14,7 +10,7 @@ public class CourseRequest {
     private String courseInclude;
     private  String courseLearning;
     private Integer status;
-    private Integer categoryId;
+    private Long categoryId;
     private Integer createdBy;
 
 }

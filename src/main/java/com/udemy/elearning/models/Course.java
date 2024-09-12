@@ -31,7 +31,7 @@ public class Course {
     @Column()
     private Integer status;
     @Column()
-    private Integer categoryId;
+    private Long categoryId;
     @Column()
     private Integer createdBy;
 
