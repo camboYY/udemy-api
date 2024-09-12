@@ -1,8 +1,6 @@
 package com.udemy.elearning.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name = "CourseTags")
 @Entity
-public class CourseTag {
+public class CourseTags {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
+    @Column()
+    private  Long courseId;
+    @Column()
+    private  String title;
+
 }

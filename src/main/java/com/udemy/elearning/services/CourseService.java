@@ -63,4 +63,9 @@ public class CourseService {
         return course;
     }
 
+    public List<Course> findByCategoryId(Long categoryId){
+        List<Course> courseList = courseRepository.findByCategoryId(categoryId);;
+        return courseList;
+    }
+
 }
