@@ -12,6 +12,10 @@
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/dto/LoginRequest.java
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/dto/ProfileRequest.java
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/dto/SignupRequest.java
+/Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/exceptions/ControllerAdvice.java
+/Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/exceptions/GlobalExceptionHandler.java
+/Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/exceptions/RestControllerAdvice.java
+/Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/exceptions/UserNotFoundException.java
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/mapper/CategoryResponse.java
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/mapper/CourseResponse.java
 /Users/yousyoeun/Documents/BBU/fullStack/assignments/e-learning/src/main/java/com/udemy/elearning/mapper/JwtResponse.java

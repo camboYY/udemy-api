@@ -1,5 +1,6 @@
 package com.udemy.elearning.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -41,11 +42,16 @@ public class User implements UserDetails {
 
     @NotBlank
     @Size(max = 120)
+    @JsonIgnore
     private String password;
 
     @NotBlank
     @Size(max = 120)
     private String phoneNumber;
+
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

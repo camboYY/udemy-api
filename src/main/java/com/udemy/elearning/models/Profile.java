@@ -31,8 +31,7 @@ public class Profile {
     @Column()
     private String currentWorkPlace;
 
-    @PrimaryKeyJoinColumn
-    @OneToOne
+    @OneToOne(mappedBy = "profile")
     private User user;
 
 }
