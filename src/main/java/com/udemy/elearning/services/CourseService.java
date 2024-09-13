@@ -2,6 +2,7 @@ package com.udemy.elearning.services;
 
 
 import com.udemy.elearning.dto.CourseRequest;
+import com.udemy.elearning.dto.CourseSearchRequest;
 import com.udemy.elearning.models.Course;
 import com.udemy.elearning.repository.CourseRepository;
 import org.apache.logging.log4j.LogManager;
@@ -54,6 +55,11 @@ public class CourseService {
     public List<Course> findAll(int page){
         PageRequest pageRequest = PageRequest.of((page-1), 10);
         Page<Course> resultPage = courseRepository.findAll(pageRequest);
+        return resultPage.getContent();
+    }
+
+    public List<Course> searchByString(String keyword,PageRequest pageRequest){
+        Page<Course> resultPage = courseRepository.searchByString(keyword, pageRequest);
         return resultPage.getContent();
     }
 

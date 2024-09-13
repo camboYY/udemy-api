@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -13,17 +15,21 @@ import java.time.LocalDateTime;
 @Table(name = "CourseOverView")
 @Entity
 public class CourseOverView {
-
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @Column()
+    private Long courseId;
+    @Column()
+    private Long userId;
+    @Column()
     private String comments;
+    @Column()
+    private Double rating;
 
-    private double rating;
-
+    @CreationTimestamp
     private LocalDateTime createdAt;
-
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
 

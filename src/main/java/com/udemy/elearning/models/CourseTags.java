@@ -15,7 +15,7 @@ public class CourseTags {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
     @Column()
-    private  Long courseId;
+    private  long courseId;
     @Column()
     private  String title;
 

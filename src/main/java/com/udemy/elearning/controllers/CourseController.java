@@ -1,17 +1,13 @@
 package com.udemy.elearning.controllers;
 
 import com.udemy.elearning.dto.CourseRequest;
+import com.udemy.elearning.dto.CourseSearchRequest;
 import com.udemy.elearning.mapper.CourseResponse;
-import com.udemy.elearning.models.Category;
-import com.udemy.elearning.models.Course;
-import com.udemy.elearning.models.CourseLesson;
-import com.udemy.elearning.models.CourseTags;
-import com.udemy.elearning.services.CategoryService;
-import com.udemy.elearning.services.CourseLessonService;
-import com.udemy.elearning.services.CourseService;
-import com.udemy.elearning.services.CourseTagService;
+import com.udemy.elearning.models.*;
+import com.udemy.elearning.services.*;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,21 +24,20 @@ public class CourseController {
     private final CategoryService categoryService;
     private final CourseTagService courseTagService;
     private final CourseLessonService courseLessonService;
+    private final CourseOverViewService courseOverViewService;
 
-    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService) {
+    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService, CourseOverViewService courseOverViewService) {
         this.courseService = courseService;
         this.categoryService = categoryService;
         this.courseTagService = courseTagService;
         this.courseLessonService = courseLessonService;
+        this.courseOverViewService = courseOverViewService;
     }
 
     @PostMapping()
     public ResponseEntity<CourseResponse> create(@Valid @RequestBody CourseRequest courseRequest) throws BadRequestException {
         Course courseCreate = courseService.create(courseRequest);
-        Category category = categoryService.findById(courseCreate.getCategoryId());
-        List<CourseTags> courseTagsList = courseTagService.findByCourseId(courseCreate.getId());
-        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(courseCreate.getId());
-        CourseResponse courseResponse = new CourseResponse(courseCreate,category, courseTagsList,courseLessonList);
+        CourseResponse courseResponse = buildCourseResponse(courseCreate);
         return ResponseEntity.ok(courseResponse);
     }
 
@@ -51,10 +46,18 @@ public class CourseController {
         List<Course> courseList = courseService.findAll(page);
         List<CourseResponse> courseResponseList = new ArrayList<>();
         for (Course course : courseList) {
-            Category category = categoryService.findById(course.getCategoryId());
-            List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-            List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-            courseResponseList.add(new CourseResponse(course,category,courseTagsList,courseLessonList));
+            courseResponseList.add(buildCourseResponse(course));
+        }
+        return ResponseEntity.ok(courseResponseList);
+    }
+
+    @GetMapping("/searchByString/{page}")
+    public ResponseEntity<List<CourseResponse>> searchByString(@Valid @RequestBody CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
+        PageRequest pageRequest = PageRequest.of(page-1, 10);
+        List<Course> courseList = courseService.searchByString(courseSearchRequest.getKeyword(), pageRequest);
+        List<CourseResponse> courseResponseList = new ArrayList<>();
+        for (Course course : courseList) {
+            courseResponseList.add(buildCourseResponse(course));
         }
         return ResponseEntity.ok(courseResponseList);
     }
@@ -62,20 +65,14 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseResponse> getById(@PathVariable(value = "id") Long id) {
         Course course = courseService.findById(id);
-        Category category = categoryService.findById(course.getCategoryId());
-        List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-        CourseResponse courseResponse = new CourseResponse(course,category,courseTagsList,courseLessonList);
+        CourseResponse courseResponse = buildCourseResponse(course);
         return ResponseEntity.ok(courseResponse);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CourseResponse> updateCourse(@PathVariable Long id, @RequestBody CourseRequest courseRequest) {
         Course course = courseService.updateCourse(id,courseRequest);
-        Category category = categoryService.findById(course.getCategoryId());
-        List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-        CourseResponse courseResponse = new CourseResponse(course,category,courseTagsList,courseLessonList);
+        CourseResponse courseResponse = buildCourseResponse(course);
         return ResponseEntity.ok(courseResponse);
     }
     @GetMapping("/getByCategoryId/{id}")
@@ -83,11 +80,15 @@ public class CourseController {
         List<Course> courseList = courseService.findByCategoryId(id);
         List<CourseResponse> courseResponseList = new ArrayList<>();
         for (Course course : courseList) {
-            Category category = categoryService.findById(course.getCategoryId());
-            List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-            List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-            courseResponseList.add(new CourseResponse(course,category,courseTagsList,courseLessonList));
+            courseResponseList.add(buildCourseResponse(course));
         }
         return ResponseEntity.ok(courseResponseList);
+    }
+    private CourseResponse buildCourseResponse(Course course) {
+        Category category = categoryService.findById(course.getCategoryId());
+        List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
+        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
+        List<CourseOverView> courseOverViews = courseOverViewService.findByCourseId(course.getId());
+        return new CourseResponse(course, category, courseTagsList, courseLessonList, courseOverViews);
     }
 }
