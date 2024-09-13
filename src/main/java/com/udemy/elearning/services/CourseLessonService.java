@@ -29,10 +29,10 @@ public class CourseLessonService {
         logger.info("course_tag {}", courseLessonRequest);
         courseLessons.setTitle(courseLessonRequest.getTitle());
         courseLessons.setDescription(courseLessonRequest.getDescription());
-        courseLessons.setThumbnailUrl(courseLessons.getThumbnailUrl());
-        courseLessons.setVideoUrl(courseLessons.getVideoUrl());
-        courseLessons.setStatus(courseLessons.getStatus());
-        courseLessons.setCreatedBy(courseLessons.getCreatedBy());
+        courseLessons.setThumbnailUrl(courseLessonRequest.getThumbnailUrl());
+        courseLessons.setVideoUrl(courseLessonRequest.getVideoUrl());
+        courseLessons.setStatus(courseLessonRequest.getStatus());
+        courseLessons.setCreatedBy(courseLessonRequest.getCreatedBy());
         courseLessons.setCourseId(courseLessonRequest.getCourseId());
         return courseLessonRepository.save(courseLessons);
     }

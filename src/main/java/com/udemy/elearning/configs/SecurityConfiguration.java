@@ -29,9 +29,10 @@ public class SecurityConfiguration {
             "swagger-ui/**",
             "/v3/api-docs/**",
             "api/categories/**",
-            "api/courses/page/**",
+            "api/courses/**",
             "api/courseTags/**",
             "api/courseLessons/**",
+            "api/courseOverViews/**",
     };
 
 

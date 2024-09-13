@@ -1,7 +1,5 @@
 package com.udemy.elearning.mapper;
-import com.udemy.elearning.models.Category;
-import com.udemy.elearning.models.Course;
-import com.udemy.elearning.models.CourseTags;
+import com.udemy.elearning.models.*;
 import lombok.Data;
 
 import java.time.Instant;
@@ -20,8 +18,10 @@ public class CourseResponse {
     private long id;
     private Category category;
     private List<CourseTags> courseTags;
+    private List<CourseLesson> courseLessons;
+    private List<CourseOverView> courseOverViews;
 
-    public CourseResponse(Course course, Category category, List<CourseTags> courseTagsList) {
+    public CourseResponse(Course course, Category category, List<CourseTags> courseTagsList,List<CourseLesson> courseLessons, List<CourseOverView> courseOverViews) {
         this.setTitle(course.getTitle());
         this.setPrice(course.getPrice());
         this.setCourseBy(course.getCourseBy());
@@ -31,10 +31,8 @@ public class CourseResponse {
         this.setCreatedBy(course.getCreatedBy());
         this.setId(course.getId());
         this.setCategory(category);
-        this.setCourseTagsList(courseTagsList);
-    }
-
-    private void setCourseTagsList(List<CourseTags> courseTagsList) {
-        this.courseTags = courseTagsList;
+        this.setCourseTags(courseTagsList);
+        this.setCourseLessons(courseLessons);
+        this.setCourseOverViews(courseOverViews);
     }
 }
