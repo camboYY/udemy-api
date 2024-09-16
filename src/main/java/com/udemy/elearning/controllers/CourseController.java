@@ -2,6 +2,7 @@ package com.udemy.elearning.controllers;
 
 import com.udemy.elearning.dto.CourseRequest;
 import com.udemy.elearning.dto.CourseSearchRequest;
+import com.udemy.elearning.mapper.CourseByResponse;
 import com.udemy.elearning.mapper.CourseResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
@@ -25,13 +26,15 @@ public class CourseController {
     private final CourseTagService courseTagService;
     private final CourseLessonService courseLessonService;
     private final CourseReviewService courseReviewService;
+    private final UserService userService;
 
-    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService, CourseReviewService courseReviewService) {
+    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService, CourseReviewService courseReviewService, UserService userService) {
         this.courseService = courseService;
         this.categoryService = categoryService;
         this.courseTagService = courseTagService;
         this.courseLessonService = courseLessonService;
         this.courseReviewService = courseReviewService;
+        this.userService = userService;
     }
 
     @PostMapping()
@@ -89,11 +92,12 @@ public class CourseController {
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
         List<CourseReview> courseReviews = courseReviewService.findByCourseId(course.getId());
+        CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
         double totalRating = 0.0;
         for (CourseReview review : courseReviews) {
             totalRating += review.getRating();
         }
         double averageRating = courseReviews.isEmpty() ? 0.0 : totalRating / courseReviews.size();
-        return new CourseResponse(course, category,averageRating, courseTagsList, courseLessonList, courseReviews);
+        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviews);
     }
 }
