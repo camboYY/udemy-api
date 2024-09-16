@@ -24,14 +24,14 @@ public class CourseController {
     private final CategoryService categoryService;
     private final CourseTagService courseTagService;
     private final CourseLessonService courseLessonService;
-    private final CourseOverViewService courseOverViewService;
+    private final CourseReviewService courseReviewService;
 
-    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService, CourseOverViewService courseOverViewService) {
+    public CourseController(CourseService courseService, CategoryService categoryService, CourseTagService courseTagService, CourseLessonService courseLessonService, CourseReviewService courseReviewService) {
         this.courseService = courseService;
         this.categoryService = categoryService;
         this.courseTagService = courseTagService;
         this.courseLessonService = courseLessonService;
-        this.courseOverViewService = courseOverViewService;
+        this.courseReviewService = courseReviewService;
     }
 
     @PostMapping()
@@ -88,7 +88,7 @@ public class CourseController {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-        List<CourseOverView> courseOverViews = courseOverViewService.findByCourseId(course.getId());
-        return new CourseResponse(course, category, courseTagsList, courseLessonList, courseOverViews);
+        List<CourseReview> courseReviews = courseReviewService.findByCourseId(course.getId());
+        return new CourseResponse(course, category, courseTagsList, courseLessonList, courseReviews);
     }
 }

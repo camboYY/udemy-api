@@ -19,9 +19,9 @@ public class CourseResponse {
     private Category category;
     private List<CourseTags> courseTags;
     private List<CourseLesson> courseLessons;
-    private List<CourseOverView> courseOverViews;
+    private List<CourseReview> courseOverViews;
 
-    public CourseResponse(Course course, Category category, List<CourseTags> courseTagsList,List<CourseLesson> courseLessons, List<CourseOverView> courseOverViews) {
+    public CourseResponse(Course course, Category category, List<CourseTags> courseTagsList,List<CourseLesson> courseLessons, List<CourseReview> courseReviews) {
         this.setTitle(course.getTitle());
         this.setPrice(course.getPrice());
         this.setCourseBy(course.getCourseBy());
