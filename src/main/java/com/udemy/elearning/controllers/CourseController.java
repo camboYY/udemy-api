@@ -89,6 +89,11 @@ public class CourseController {
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
         List<CourseReview> courseReviews = courseReviewService.findByCourseId(course.getId());
-        return new CourseResponse(course, category, courseTagsList, courseLessonList, courseReviews);
+        double totalRating = 0.0;
+        for (CourseReview review : courseReviews) {
+            totalRating += review.getRating();
+        }
+        double averageRating = courseReviews.isEmpty() ? 0.0 : totalRating / courseReviews.size();
+        return new CourseResponse(course, category,averageRating, courseTagsList, courseLessonList, courseReviews);
     }
 }

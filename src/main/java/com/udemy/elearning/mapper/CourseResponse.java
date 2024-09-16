@@ -16,12 +16,13 @@ public class CourseResponse {
     private Integer status;
     private Integer createdBy;
     private long id;
+    private Double rating;
     private Category category;
     private List<CourseTags> courseTags;
     private List<CourseLesson> courseLessons;
-    private List<CourseReview> courseOverViews;
+    private List<CourseReview> courseReviews;
 
-    public CourseResponse(Course course, Category category, List<CourseTags> courseTagsList,List<CourseLesson> courseLessons, List<CourseReview> courseReviews) {
+    public CourseResponse(Course course, Category category, Double rating, List<CourseTags> courseTagsList,List<CourseLesson> courseLessons, List<CourseReview> courseReviews) {
         this.setTitle(course.getTitle());
         this.setPrice(course.getPrice());
         this.setCourseBy(course.getCourseBy());
@@ -30,9 +31,10 @@ public class CourseResponse {
         this.setStatus(course.getStatus());
         this.setCreatedBy(course.getCreatedBy());
         this.setId(course.getId());
+        this.setRating(rating);
         this.setCategory(category);
         this.setCourseTags(courseTagsList);
         this.setCourseLessons(courseLessons);
-        this.setCourseOverViews(courseOverViews);
+        this.setCourseReviews(courseReviews);
     }
 }
