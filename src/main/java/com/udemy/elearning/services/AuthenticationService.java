@@ -55,6 +55,9 @@ public class AuthenticationService {
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Error: Email is already in use!");
         }
+        if (userRepository.existsByPhoneNumber(signUpRequest.getPhoneNumber())) {
+            throw new BadRequestException("Error: Phone Number is already in use!");
+        }
 
         // Create new user's account
         User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
