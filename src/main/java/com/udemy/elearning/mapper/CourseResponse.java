@@ -12,6 +12,7 @@ public class CourseResponse {
     private Double price;
     private String courseInclude;
     private  String courseLearning;
+    private  String thumbnailUrl;
     private Integer status;
     private Integer createdBy;
     private long id;
@@ -27,6 +28,7 @@ public class CourseResponse {
         this.setPrice(course.getPrice());
         this.setCourseInclude(course.getCourseInclude());
         this.setCourseLearning(course.getCourseLearning());
+        this.setThumbnailUrl(course.getThumbnailUrl());
         this.setStatus(course.getStatus());
         this.setCreatedBy(course.getCreatedBy());
         this.setId(course.getId());

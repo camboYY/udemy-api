@@ -28,6 +28,8 @@ public class Course {
     private String courseInclude;
     @Column(nullable = true)
     private  String courseLearning;
+    @Column(nullable = true)
+    private  String thumbnailUrl;
     @Column()
     private Integer status;
     @Column()
