@@ -25,4 +25,13 @@ public class UserService {
         CourseByResponse courseByResponse = new CourseByResponse(user);
         return courseByResponse;
     }
+    public Boolean validateEmail(String keyValue){
+        return userRepository.existsByEmail(keyValue);
+    }
+    public Boolean validateUsername(String keyValue){
+        return userRepository.existsByUsername(keyValue);
+    }
+    public Boolean validatePhoneNumber(String keyValue){
+        return userRepository.existsByPhoneNumber(keyValue);
+    }
 }

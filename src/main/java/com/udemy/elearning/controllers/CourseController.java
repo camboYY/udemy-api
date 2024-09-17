@@ -6,7 +6,6 @@ import com.udemy.elearning.mapper.CourseByResponse;
 import com.udemy.elearning.mapper.CourseResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
-import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
