@@ -45,16 +45,6 @@ public class CourseController {
         return ResponseEntity.ok(courseResponse);
     }
 
-//    @GetMapping("/page/{page}")
-//    public ResponseEntity<List<CourseResponse>> getAll(@PathVariable(value = "page") int page) {
-//        List<Course> courseList = courseService.findAll(page);
-//        List<CourseResponse> courseResponseList = new ArrayList<>();
-//        for (Course course : courseList) {
-//            courseResponseList.add(buildCourseResponse(course));
-//        }
-//        return ResponseEntity.ok(courseResponseList);
-//    }
-
     @GetMapping("/page/{page}")
     public ResponseEntity<List<CourseResponse>> searchByString(@RequestBody(required = false) CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
         if (courseSearchRequest.getKeyword() == null || courseSearchRequest.getKeyword().isEmpty()) {
