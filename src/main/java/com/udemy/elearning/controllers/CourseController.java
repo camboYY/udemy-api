@@ -6,6 +6,7 @@ import com.udemy.elearning.mapper.CourseByResponse;
 import com.udemy.elearning.mapper.CourseResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
+import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
@@ -44,25 +45,35 @@ public class CourseController {
         return ResponseEntity.ok(courseResponse);
     }
 
-    @GetMapping("/page/{page}")
-    public ResponseEntity<List<CourseResponse>> getAll(@PathVariable(value = "page") int page) {
-        List<Course> courseList = courseService.findAll(page);
-        List<CourseResponse> courseResponseList = new ArrayList<>();
-        for (Course course : courseList) {
-            courseResponseList.add(buildCourseResponse(course));
-        }
-        return ResponseEntity.ok(courseResponseList);
-    }
+//    @GetMapping("/page/{page}")
+//    public ResponseEntity<List<CourseResponse>> getAll(@PathVariable(value = "page") int page) {
+//        List<Course> courseList = courseService.findAll(page);
+//        List<CourseResponse> courseResponseList = new ArrayList<>();
+//        for (Course course : courseList) {
+//            courseResponseList.add(buildCourseResponse(course));
+//        }
+//        return ResponseEntity.ok(courseResponseList);
+//    }
 
-    @GetMapping("/searchByString/{page}")
-    public ResponseEntity<List<CourseResponse>> searchByString(@Valid @RequestBody CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
-        PageRequest pageRequest = PageRequest.of(page-1, 10);
-        List<Course> courseList = courseService.searchByString(courseSearchRequest.getKeyword(), pageRequest);
-        List<CourseResponse> courseResponseList = new ArrayList<>();
-        for (Course course : courseList) {
-            courseResponseList.add(buildCourseResponse(course));
+    @GetMapping("/page/{page}")
+    public ResponseEntity<List<CourseResponse>> searchByString(@RequestBody(required = false) CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
+        if (courseSearchRequest.getKeyword() == null || courseSearchRequest.getKeyword().isEmpty()) {
+            List<Course> courseList = courseService.findAll(page);
+            List<CourseResponse> courseResponseList = new ArrayList<>();
+            for (Course course : courseList) {
+                courseResponseList.add(buildCourseResponse(course));
+            }
+            return ResponseEntity.ok(courseResponseList);
+        }else{
+            PageRequest pageRequest = PageRequest.of(page-1, 10);
+            List<Course> courseList = courseService.searchByString(courseSearchRequest.getKeyword(), pageRequest);
+            List<CourseResponse> courseResponseList = new ArrayList<>();
+            for (Course course : courseList) {
+                courseResponseList.add(buildCourseResponse(course));
+            }
+            return ResponseEntity.ok(courseResponseList);
         }
-        return ResponseEntity.ok(courseResponseList);
+
     }
 
     @GetMapping("/{id}")
