@@ -2,6 +2,7 @@ package com.udemy.elearning.services;
 
 
 import com.udemy.elearning.dto.CourseReviewRequest;
+import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.CourseReview;
 import com.udemy.elearning.repository.CourseReviewRepository;
 import org.apache.logging.log4j.LogManager;
@@ -50,9 +51,9 @@ public class CourseReviewService {
     }
 
     public List<CourseReview> findByCourseId(Long courseId){
-        List<CourseReview> courseReviewsList = courseReviewRepository.findByCourseId(courseId);
-        logger.info("CourseReview {}", courseReviewsList);
-        return courseReviewsList;
+        List<CourseReview> courseReviewList = courseReviewRepository.findByCourseId(courseId);
+        logger.info("CourseReview {}", courseReviewList);
+        return courseReviewList;
     }
 
     public CourseReview findById(Long id){

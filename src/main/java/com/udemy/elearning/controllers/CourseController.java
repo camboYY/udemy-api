@@ -4,6 +4,7 @@ import com.udemy.elearning.dto.CourseRequest;
 import com.udemy.elearning.dto.CourseSearchRequest;
 import com.udemy.elearning.mapper.CourseByResponse;
 import com.udemy.elearning.mapper.CourseResponse;
+import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
 import jakarta.validation.Valid;
@@ -91,13 +92,20 @@ public class CourseController {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-        List<CourseReview> courseReviews = courseReviewService.findByCourseId(course.getId());
+        List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
         CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
         double totalRating = 0.0;
-        for (CourseReview review : courseReviews) {
-            totalRating += review.getRating();
+        List<CourseReviewResponse> courseReviewResponses = new ArrayList<>();
+        for (CourseReview reviewResponse : courseReviewList) {
+            totalRating += reviewResponse.getRating();
+            courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
-        double averageRating = courseReviews.isEmpty() ? 0.0 : totalRating / courseReviews.size();
-        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviews);
+        double averageRating = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
+    }
+    private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {
+        User user = userService.getUserReview(courseReview.getUserId());
+        String username = user.getName();
+        return new CourseReviewResponse(courseReview, username);
     }
 }
