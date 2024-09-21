@@ -33,6 +33,7 @@ public class SecurityConfiguration {
             "api/courseTags/**",
             "api/courseLessons/**",
             "api/courseReviews/**",
+            "api/users/list"
     };
 
 
