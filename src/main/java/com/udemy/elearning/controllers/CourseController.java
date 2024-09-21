@@ -46,8 +46,10 @@ public class CourseController {
     }
 
     @GetMapping("/page/{page}")
-    public ResponseEntity<List<CourseResponse>> searchByString(@RequestBody(required = false) CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
-        if (courseSearchRequest.getKeyword() == null || courseSearchRequest.getKeyword().isEmpty()) {
+    public ResponseEntity<List<CourseResponse>> searchByString(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        if (keyword == null || keyword.isEmpty()) {
             List<Course> courseList = courseService.findAll(page);
             List<CourseResponse> courseResponseList = new ArrayList<>();
             for (Course course : courseList) {
@@ -56,7 +58,7 @@ public class CourseController {
             return ResponseEntity.ok(courseResponseList);
         }else{
             PageRequest pageRequest = PageRequest.of(page-1, 10);
-            List<Course> courseList = courseService.searchByString(courseSearchRequest.getKeyword(), pageRequest);
+            List<Course> courseList = courseService.searchByString(keyword, pageRequest);
             List<CourseResponse> courseResponseList = new ArrayList<>();
             for (Course course : courseList) {
                 courseResponseList.add(buildCourseResponse(course));
