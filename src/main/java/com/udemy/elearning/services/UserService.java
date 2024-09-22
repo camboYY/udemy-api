@@ -34,4 +34,8 @@ public class UserService {
     public Boolean validatePhoneNumber(String keyValue){
         return userRepository.existsByPhoneNumber(keyValue);
     }
+    public User getUserReview(Long id){
+        User user = userRepository.findById(id).orElseThrow(()->new NotFoundException("User not found"));
+        return user;
+    }
 }

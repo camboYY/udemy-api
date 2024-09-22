@@ -4,6 +4,7 @@ import com.udemy.elearning.dto.CourseRequest;
 import com.udemy.elearning.dto.CourseSearchRequest;
 import com.udemy.elearning.mapper.CourseByResponse;
 import com.udemy.elearning.mapper.CourseResponse;
+import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
 import jakarta.validation.Valid;
@@ -45,8 +46,10 @@ public class CourseController {
     }
 
     @GetMapping("/page/{page}")
-    public ResponseEntity<List<CourseResponse>> searchByString(@RequestBody(required = false) CourseSearchRequest courseSearchRequest, @PathVariable(value = "page") int page) {
-        if (courseSearchRequest.getKeyword() == null || courseSearchRequest.getKeyword().isEmpty()) {
+    public ResponseEntity<List<CourseResponse>> searchByString(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        if (keyword == null || keyword.isEmpty()) {
             List<Course> courseList = courseService.findAll(page);
             List<CourseResponse> courseResponseList = new ArrayList<>();
             for (Course course : courseList) {
@@ -55,7 +58,7 @@ public class CourseController {
             return ResponseEntity.ok(courseResponseList);
         }else{
             PageRequest pageRequest = PageRequest.of(page-1, 10);
-            List<Course> courseList = courseService.searchByString(courseSearchRequest.getKeyword(), pageRequest);
+            List<Course> courseList = courseService.searchByString(keyword, pageRequest);
             List<CourseResponse> courseResponseList = new ArrayList<>();
             for (Course course : courseList) {
                 courseResponseList.add(buildCourseResponse(course));
@@ -91,13 +94,20 @@ public class CourseController {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
-        List<CourseReview> courseReviews = courseReviewService.findByCourseId(course.getId());
+        List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
         CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
         double totalRating = 0.0;
-        for (CourseReview review : courseReviews) {
-            totalRating += review.getRating();
+        List<CourseReviewResponse> courseReviewResponses = new ArrayList<>();
+        for (CourseReview reviewResponse : courseReviewList) {
+            totalRating += reviewResponse.getRating();
+            courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
-        double averageRating = courseReviews.isEmpty() ? 0.0 : totalRating / courseReviews.size();
-        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviews);
+        double averageRating = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
+    }
+    private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {
+        User user = userService.getUserReview(courseReview.getUserId());
+        String username = user.getName();
+        return new CourseReviewResponse(courseReview, username);
     }
 }

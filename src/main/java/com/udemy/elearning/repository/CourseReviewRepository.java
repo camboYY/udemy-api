@@ -1,6 +1,7 @@
 package com.udemy.elearning.repository;
 
 
+import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.CourseReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

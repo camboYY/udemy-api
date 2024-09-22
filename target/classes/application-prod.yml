@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: ${{ secrets.DOCKER_DATABASE_USERNAME }}
-    url: ${{ secrets.DOCKER_DATABASE_URL }}
-    password: ${{ secrets.DOCKER_DATABASE_PASSWORD }}
+    username: ""
+    url: ""
+    password: ""
   jpa:
     properties:
       hibernate:
