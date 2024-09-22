@@ -2,7 +2,6 @@ package com.udemy.elearning.services;
 
 
 import com.udemy.elearning.dto.CourseReviewRequest;
-import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.CourseReview;
 import com.udemy.elearning.repository.CourseReviewRepository;
 import org.apache.logging.log4j.LogManager;
