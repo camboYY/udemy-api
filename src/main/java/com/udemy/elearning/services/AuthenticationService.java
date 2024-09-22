@@ -68,11 +68,7 @@ public class AuthenticationService {
         logger.info("roles{}", roles);
 
         if (strRoles == null) {
-
-            Role defaultRole = new Role();
-            defaultRole.setName(ERole.ROLE_USER);
-
-            roles.add(defaultRole);
+            roles.add(findRoleByName(ERole.ROLE_USER));
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
