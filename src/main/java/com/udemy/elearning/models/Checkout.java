@@ -8,16 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "CardInfos")
+@Table(name = "Checkouts")
 @Entity
-public class CardInfo {
+public class Checkout {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
-    private String CardNumber;
-    private String CardHolderName;
-    private String CardType;
-    private String CardExpiry;
-    private String CardCVC;
+    private Long userId;
+    private Long courseId;
+
 }
