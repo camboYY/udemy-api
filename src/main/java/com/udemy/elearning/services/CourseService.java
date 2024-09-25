@@ -2,7 +2,6 @@ package com.udemy.elearning.services;
 
 
 import com.udemy.elearning.dto.CourseRequest;
-import com.udemy.elearning.dto.CourseSearchRequest;
 import com.udemy.elearning.models.Course;
 import com.udemy.elearning.repository.CourseRepository;
 import org.apache.logging.log4j.LogManager;
