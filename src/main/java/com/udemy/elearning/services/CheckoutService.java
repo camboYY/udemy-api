@@ -2,6 +2,7 @@ package com.udemy.elearning.services;
 
 
 import com.udemy.elearning.dto.CheckoutRequest;
+import com.udemy.elearning.mapper.CheckoutResponse;
 import com.udemy.elearning.models.CardInfo;
 import com.udemy.elearning.models.Checkout;
 import com.udemy.elearning.models.CheckoutCourse;
@@ -26,7 +27,6 @@ public class CheckoutService {
     private final CheckoutCourseRepository checkoutCourseRepository;
     private final CourseRepository courseRepository;
     private final CardInfoRepository cardInfoRepository;
-
     public CheckoutService(CheckoutRepository checkoutRepository, CheckoutCourseRepository checkoutCourseRepository, CourseRepository courseRepository, CardInfoRepository cardInfoRepository) {
         this.checkoutRepository = checkoutRepository;
         this.checkoutCourseRepository = checkoutCourseRepository;
@@ -35,32 +35,30 @@ public class CheckoutService {
     }
 
     public Checkout create(CheckoutRequest checkoutRequest){
-        CardInfo cardInfo = new CardInfo();
-        cardInfo.setCardNumber(checkoutRequest.getCardNumber());
-        cardInfo.setCardHolderName(checkoutRequest.getCardHolderName());
-        cardInfo.setCardType(checkoutRequest.getCardType());
-        cardInfo.setCardExpiry(checkoutRequest.getCardExpiry());
-        cardInfo.setCardCVC(checkoutRequest.getCardCVC());
-        CardInfo cardInfo1 = cardInfoRepository.save(cardInfo);
-
-        Checkout checkout = new Checkout();
-        checkout.setUserId(checkoutRequest.getUserId());
-        checkout.setCardInfoId(cardInfo1.getId());
-        checkout.setTotalAmount(checkoutRequest.getTotalAmount());
-        Checkout checkout1 = checkoutRepository.save(checkout);
-
-
-
+        double total_amount = 0.00;
         for (long courseId: checkoutRequest.getCourseId()){
             CheckoutCourse checkoutCourse = new CheckoutCourse();
             checkoutCourse.setCourseId(courseId);
             checkoutCourse.setCheckoutId(courseId);
             Course course = courseRepository.findById(courseId).orElseThrow(()->new NotFoundException("Course not found"));
             checkoutCourse.setPrice(course.getPrice());
+            total_amount += course.getPrice();
             CheckoutCourse checkoutCourseResult = checkoutCourseRepository.save(checkoutCourse);
         }
+        Checkout checkout = new Checkout();
+        checkout.setUserId(checkoutRequest.getUserId());
+        checkout.setTotalAmount(total_amount);
 
-        return checkout1;
+        CardInfo cardInfo = new CardInfo();
+        cardInfo.setCardNumber(checkoutRequest.getCardNumber());
+        cardInfo.setCardType(checkoutRequest.getCardType());
+        cardInfo.setCardHolderName(checkoutRequest.getCardHolderName());
+        cardInfo.setCardExpiry(checkoutRequest.getCardExpiry());
+        cardInfo.setCardCVC(checkoutRequest.getCardCVC());
+        CardInfo cardInfoResult = cardInfoRepository.save(cardInfo);
+
+        checkout.setCardInfoId(cardInfoResult.getId());
+        return checkoutRepository.save(checkout);
     }
 
     public List<Checkout> findAll(){

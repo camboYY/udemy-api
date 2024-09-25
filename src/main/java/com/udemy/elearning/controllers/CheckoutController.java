@@ -1,16 +1,9 @@
 package com.udemy.elearning.controllers;
 
-import com.udemy.elearning.dto.CardInfoRequest;
 import com.udemy.elearning.dto.CheckoutRequest;
-import com.udemy.elearning.mapper.CardInfoResponse;
 import com.udemy.elearning.mapper.CheckoutResponse;
-import com.udemy.elearning.models.CardInfo;
 import com.udemy.elearning.models.Checkout;
-import com.udemy.elearning.models.CheckoutCourse;
-import com.udemy.elearning.repository.CheckoutRepository;
-import com.udemy.elearning.services.CardInfoService;
 import com.udemy.elearning.services.CheckoutService;
-import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +23,7 @@ public class CheckoutController {
     }
 
     @PostMapping()
-    public ResponseEntity<Checkout> create(@Valid @RequestBody CheckoutRequest checkoutRequest) throws BadRequestException {
+    public ResponseEntity<Checkout> create(@RequestBody CheckoutRequest checkoutRequest) throws BadRequestException {
         Checkout checkout = checkoutService.create(checkoutRequest);
         return ResponseEntity.ok(checkout);
     }

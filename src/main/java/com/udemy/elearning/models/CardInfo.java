@@ -17,9 +17,9 @@ public class CardInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
-    private Number CardNumber;
+    private String CardNumber;
     private String CardHolderName;
     private String CardType;
     private Date CardExpiry;
-    private String CardCVC;
+    private long CardCVC;
 }
