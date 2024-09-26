@@ -35,8 +35,6 @@ public class SecurityConfiguration {
             "api/courseReviews/**",
             "api/users/validate/**",
             "api/users/list",
-            "api/checkout/**",
-            "api/cardInfo/**"
     };
 
 
