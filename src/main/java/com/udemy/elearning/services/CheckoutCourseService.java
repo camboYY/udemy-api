@@ -7,6 +7,7 @@ import com.udemy.elearning.repository.CheckoutCourseRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CheckoutCourseService {
         this.checkoutCourseRepository = checkoutCourseRepository;
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     public CheckoutCourse create(CheckoutCourseRequest checkoutCourseRequest){
         CheckoutCourse checkoutCourse = new CheckoutCourse();
         checkoutCourse.setCourseId(checkoutCourse.getCourseId());
