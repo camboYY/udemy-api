@@ -16,6 +16,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,6 +39,11 @@ public class CheckoutService {
     }
 
     public Checkout create(CheckoutRequest checkoutRequest){
+
+        if (isCardExpired(checkoutRequest.getCardExpiry())) {
+            throw new IllegalArgumentException("Card is expired");
+        }
+
         double total_amount = 0.00;
         for (long courseId: checkoutRequest.getCourseId()){
             CheckoutCourse checkoutCourse = new CheckoutCourse();
@@ -69,5 +78,13 @@ public class CheckoutService {
         Checkout checkout = checkoutRepository.findById(id).orElseThrow(()->new NotFoundException("Checkout not found"));
         logger.info("checkout {}", checkout);
         return checkout;
+    }
+    private boolean isCardExpired(String cardExpiry) {
+        // Assuming cardExpiry is in the format "MM/YY"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
+        YearMonth expiryDate = YearMonth.parse(cardExpiry, formatter);
+        YearMonth currentDate = YearMonth.now();
+
+        return expiryDate.isBefore(currentDate);  // Return true if the card is expired
     }
 }

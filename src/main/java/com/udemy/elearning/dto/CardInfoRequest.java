@@ -10,7 +10,7 @@ public class CardInfoRequest {
     private String cardNumber;
     private String cardHolderName;
     private String cardType;
-    private Date cardExpiry;
+    private String cardExpiry;
     private long cardCVC;
 
 }

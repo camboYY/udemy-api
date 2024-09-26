@@ -12,7 +12,7 @@ public class CheckoutRequest {
     private String cardNumber;
     private String cardHolderName;
     private String cardType;
-    private Date cardExpiry;
+    private String cardExpiry;
     private long cardCVC;
 
     private List<Long> courseId;

@@ -20,6 +20,6 @@ public class CardInfo {
     private String CardNumber;
     private String CardHolderName;
     private String CardType;
-    private Date CardExpiry;
+    private String CardExpiry;
     private long CardCVC;
 }
