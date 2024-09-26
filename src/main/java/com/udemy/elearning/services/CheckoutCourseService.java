@@ -26,7 +26,6 @@ public class CheckoutCourseService {
         CheckoutCourse checkoutCourse = new CheckoutCourse();
         checkoutCourse.setCourseId(checkoutCourse.getCourseId());
         checkoutCourse.setPrice(checkoutCourse.getPrice());
-        CheckoutCourse checkoutCourseResult = checkoutCourseRepository.save(checkoutCourse);
         return  checkoutCourseRepository.save(checkoutCourse);
     }
 
