@@ -5,21 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Table(name = "CardInfos")
+@Table(name = "CheckoutCourses")
 @Entity
-public class CardInfo {
+public class CheckoutCourse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
-
-    private String CardNumber;
-    private String CardHolderName;
-    private String CardType;
-    private String CardExpiry;
-    private long CardCVC;
+    private Long courseId;
+    private Long checkoutId;
+    private double price;
 }

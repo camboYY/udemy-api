@@ -13,6 +13,7 @@ public class JwtResponse {
     private String token;
 
     private long expiresIn;
+    private long userId;
 
     void setExpiresIn(long second){
         this.expiresIn  = second;
