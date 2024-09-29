@@ -17,9 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class AuthenticationService {
@@ -63,34 +61,36 @@ public class AuthenticationService {
         User user = new User(signUpRequest.getUsername(), signUpRequest.getEmail(),passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),
                 signUpRequest.getPhoneNumber());
 
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-        logger.info("roles{}", roles);
+        String strRole = signUpRequest.getRole();
+        Role roles = null;
+        logger.info("role{}", strRole);
 
-        if (strRoles == null) {
-            roles.add(findRoleByName(ERole.ROLE_USER));
+        if (strRole == null) {
+            roles = (findRoleByName(ERole.ROLE_USER));
         } else {
-            strRoles.forEach(role -> {
-                switch (role) {
+
+                switch (strRole) {
+                    case "superAdmin":
+                        roles = (findRoleByName(ERole.SUPER_ADMIN));
+                        break;
                     case "admin":
-                        roles.add(findRoleByName(ERole.ROLE_ADMIN));
+                        roles = (findRoleByName(ERole.ROLE_ADMIN));
                         break;
                     case "mod":
-                        roles.add(findRoleByName(ERole.ROLE_MODERATOR));
+                        roles = (findRoleByName(ERole.ROLE_MODERATOR));
                         break;
                     case "student":
-                        roles.add( findRoleByName(ERole.ROLE_STUDENT));
+                        roles = ( findRoleByName(ERole.ROLE_STUDENT));
                         break;
                     case "teacher":
-                        roles.add(findRoleByName(ERole.ROLE_TEACHER));
+                        roles = (findRoleByName(ERole.ROLE_TEACHER));
                         break;
                     default:
-                     roles.add(findRoleByName(ERole.ROLE_USER));
+                     roles = (findRoleByName(ERole.ROLE_USER));
                 }
-            });
-        }
+            }
 
-        user.setRoles(roles);
+        user.setRole(roles);
         return userRepository.save(user);
     }
 
