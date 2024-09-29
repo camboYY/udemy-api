@@ -43,20 +43,9 @@ public class CheckoutService {
         if (isCardExpired(checkoutRequest.getCardExpiry())) {
             throw new IllegalArgumentException("Card is expired");
         }
-
-        double total_amount = 0.00;
-        for (long courseId: checkoutRequest.getCourseId()){
-            CheckoutCourse checkoutCourse = new CheckoutCourse();
-            checkoutCourse.setCourseId(courseId);
-            checkoutCourse.setCheckoutId(courseId);
-            Course course = courseRepository.findById(courseId).orElseThrow(()->new NotFoundException("Course not found"));
-            checkoutCourse.setPrice(course.getPrice());
-            total_amount += course.getPrice();
-            CheckoutCourse checkoutCourseResult = checkoutCourseRepository.save(checkoutCourse);
-        }
         Checkout checkout = new Checkout();
         checkout.setUserId(checkoutRequest.getUserId());
-        checkout.setTotalAmount(total_amount);
+        checkout.setTotalAmount(checkoutRequest.getTotalAmount());
 
         CardInfo cardInfo = new CardInfo();
         cardInfo.setCardNumber(checkoutRequest.getCardNumber());
@@ -65,9 +54,18 @@ public class CheckoutService {
         cardInfo.setCardExpiry(checkoutRequest.getCardExpiry());
         cardInfo.setCardCVC(checkoutRequest.getCardCVC());
         CardInfo cardInfoResult = cardInfoRepository.save(cardInfo);
-
         checkout.setCardInfoId(cardInfoResult.getId());
-        return checkoutRepository.save(checkout);
+
+        Checkout checkoutCreate = checkoutRepository.save(checkout);
+        for (long courseId: checkoutRequest.getCourseId()){
+            CheckoutCourse checkoutCourse = new CheckoutCourse();
+            checkoutCourse.setCourseId(courseId);
+            checkoutCourse.setCheckoutId(checkoutCreate.getId());
+            Course course = courseRepository.findById(courseId).orElseThrow(()->new NotFoundException("Course not found"));
+            checkoutCourse.setPrice(course.getPrice());
+            CheckoutCourse checkoutCourseResult = checkoutCourseRepository.save(checkoutCourse);
+        }
+        return checkoutCreate;
     }
 
     public List<Checkout> findAll(){
@@ -86,5 +84,10 @@ public class CheckoutService {
         YearMonth currentDate = YearMonth.now();
 
         return expiryDate.isBefore(currentDate);  // Return true if the card is expired
+    }
+    public List<Checkout> myOrderList(Long userId){
+        List<Checkout> checkoutList = checkoutRepository.findByUserId(userId);
+        logger.info("checkoutList {}", checkoutList);
+        return checkoutList;
     }
 }

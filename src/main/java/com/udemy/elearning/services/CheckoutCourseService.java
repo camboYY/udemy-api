@@ -24,8 +24,9 @@ public class CheckoutCourseService {
 
     public CheckoutCourse create(CheckoutCourseRequest checkoutCourseRequest){
         CheckoutCourse checkoutCourse = new CheckoutCourse();
-        checkoutCourse.setCourseId(checkoutCourse.getCourseId());
-        checkoutCourse.setPrice(checkoutCourse.getPrice());
+        checkoutCourse.setCheckoutId(checkoutCourseRequest.getCheckoutId());
+        checkoutCourse.setCourseId(checkoutCourseRequest.getCourseId());
+        checkoutCourse.setPrice(checkoutCourseRequest.getPrice());
         return  checkoutCourseRepository.save(checkoutCourse);
     }
 
@@ -33,9 +34,9 @@ public class CheckoutCourseService {
         return checkoutCourseRepository.findAll();
     }
 
-    public CheckoutCourse findById(Long id){
-        CheckoutCourse checkoutCourse = checkoutCourseRepository.findById(id).orElseThrow(()->new NotFoundException("CheckoutCourse not found"));
-        logger.info("checkoutCourse {}", checkoutCourse);
-        return checkoutCourse;
+    public List<CheckoutCourse> findByCheckoutId(Long id){
+        List<CheckoutCourse> checkoutCourseList = checkoutCourseRepository.findByCheckoutId(id);
+        logger.info("checkoutCourseList {}", checkoutCourseList);
+        return checkoutCourseList;
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class CheckoutRequest {
     private Long userId;
-
+    private Double totalAmount;
     private String cardNumber;
     private String cardHolderName;
     private String cardType;
