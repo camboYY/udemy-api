@@ -11,6 +11,7 @@ import com.udemy.elearning.repository.CardInfoRepository;
 import com.udemy.elearning.repository.CheckoutCourseRepository;
 import com.udemy.elearning.repository.CheckoutRepository;
 import com.udemy.elearning.repository.CourseRepository;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class CheckoutService {
         this.cardInfoRepository = cardInfoRepository;
     }
 
+    @Transactional
     public Checkout create(CheckoutRequest checkoutRequest){
 
         if (isCardExpired(checkoutRequest.getCardExpiry())) {
