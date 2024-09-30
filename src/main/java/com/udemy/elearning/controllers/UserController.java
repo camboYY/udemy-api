@@ -3,6 +3,8 @@ package com.udemy.elearning.controllers;
 import com.udemy.elearning.dto.RegisterValidateRequest;
 import com.udemy.elearning.models.User;
 import com.udemy.elearning.services.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +21,7 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -34,20 +37,14 @@ public class UserController {
 
     }
 
-    @GetMapping
-    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
-    public ResponseEntity<List<User>> allUsers() {
-        List <User> users = userService.allUsers();
-
-        return ResponseEntity.ok(users);
-
-    }
-
     @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<List<User>> getUsers(@RequestParam(name = "page",defaultValue = "0") Integer page) {
         int size = 10;
         Pageable pageable = PageRequest.of(page, size);
         Page<User> pages = this.userService.getUsers(pageable);
+        logger.info("pages.getContent(): {}", pages.getContent());
+
         return ResponseEntity.ok(pages.getContent());
     }
 

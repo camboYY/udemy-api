@@ -25,14 +25,14 @@ public class RoleSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void loadRoles() {
-        ERole[] roleNames = new ERole[] { ERole.ROLE_USER, ERole.ROLE_STUDENT, ERole.ROLE_ADMIN,ERole.ROLE_TEACHER,ERole.ROLE_MODERATOR };
+        ERole[] roleNames = new ERole[] { ERole.ROLE_USER, ERole.ROLE_STUDENT, ERole.ROLE_ADMIN,ERole.ROLE_TEACHER,ERole.ROLE_MODERATOR ,ERole.ROLE_SUPER_ADMIN};
         Map<ERole, String> roleDescriptionMap = Map.of(
                 ERole.ROLE_USER, "Default user role",
                 ERole.ROLE_ADMIN, "Administrator role",
                 ERole.ROLE_STUDENT, "Student role",
                 ERole.ROLE_TEACHER,"Teacher role",
                 ERole.ROLE_MODERATOR, "Moderator role",
-                ERole.SUPER_ADMIN,"Super admin role"
+                ERole.ROLE_SUPER_ADMIN,"Super admin role"
         );
 
         Arrays.stream(roleNames).forEach((roleName) -> {

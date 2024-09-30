@@ -71,7 +71,7 @@ public class AuthenticationService {
 
                 switch (strRole) {
                     case "superAdmin":
-                        roles = (findRoleByName(ERole.SUPER_ADMIN));
+                        roles = (findRoleByName(ERole.ROLE_SUPER_ADMIN));
                         break;
                     case "admin":
                         roles = (findRoleByName(ERole.ROLE_ADMIN));

@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,9 +47,6 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(()->new NotFoundException("User not found"));
     }
 
-    public List<User> allUsers() {
-        return new ArrayList<>(userRepository.findAll());
-    }
 
     public User createAdministrator(SignupRequest input) {
         Optional<Role> optionalRole = roleRepository.findByName(ERole.ROLE_ADMIN);
@@ -62,9 +57,11 @@ public class UserService {
 
         User user = new User();
         user.setName(input.getName());
-        user  .setEmail(input.getEmail());
-        user    .setPassword(passwordEncoder.encode(input.getPassword()));
-        user    .setRole(optionalRole.get());
+        user.setEmail(input.getEmail());
+        user.setPassword(passwordEncoder.encode(input.getPassword()));
+        user.setRole(optionalRole.get());
+        user.setPhoneNumber(input.getPhoneNumber());
+        user.setUsername(input.getUsername());
 
         return userRepository.save(user);
 
