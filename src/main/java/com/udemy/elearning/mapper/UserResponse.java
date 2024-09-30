@@ -10,14 +10,14 @@ public class UserResponse {
     private String username;
     private String name;
     private String email;
-    private Set<Role> roles;
+    private Role role;
     private String PhoneNumber;
     private long id;
 
     public UserResponse(User registeredUser){
         this.setEmail(registeredUser.getEmail());
         this.setName(registeredUser.getName());
-        this.setRoles(registeredUser.getRoles());
+        this.setRole(registeredUser.getRole());
         this.setUsername(registeredUser.getUsername());
         this.setPhoneNumber(registeredUser.getPhoneNumber());
         this.setId(registeredUser.getId());
