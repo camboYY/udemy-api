@@ -1,12 +1,16 @@
 package com.udemy.elearning.services;
 
 import com.udemy.elearning.dto.SignupRequest;
+import com.udemy.elearning.dto.UpgradeRoleRequest;
+import com.udemy.elearning.dto.UpgradingRoleRequest;
+import com.udemy.elearning.exceptions.UserNotFoundException;
 import com.udemy.elearning.mapper.CourseByResponse;
-import com.udemy.elearning.models.ERole;
-import com.udemy.elearning.models.Role;
-import com.udemy.elearning.models.User;
+import com.udemy.elearning.mapper.UpgradeRoleResponse;
+import com.udemy.elearning.models.*;
+import com.udemy.elearning.repository.ProfileRepository;
 import com.udemy.elearning.repository.RoleRepository;
 import com.udemy.elearning.repository.UserRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +27,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private ProfileRepository profileRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -65,5 +72,29 @@ public class UserService {
 
         return userRepository.save(user);
 
+    }
+
+    public UpgradeRoleResponse upgradeRole(UpgradeRoleRequest roleRequest) {
+        Optional<Role> role = roleRepository.findByName(roleRequest.getRole());
+        Optional<User> user =  userRepository.findById(roleRequest.getUserId());
+      if(user.isPresent() && role.isPresent()) {
+          user.get().setRole(role.get());
+        User user1 = userRepository.save(user.get());
+        return new UpgradeRoleResponse(user1.getRole().getName());
+      }
+      throw new UserNotFoundException("user is not found.");
+    }
+
+    public Profile becomingTeacher(UpgradingRoleRequest upgradingRoleRequest) throws BadRequestException {
+        Optional<Profile> profile = profileRepository.findById(upgradingRoleRequest.getProfileId());
+        if(profile.isPresent()){
+            profile.get().setUpgradeRoleStatus(UpgradeRoleStatus.PENDING);
+            return profileRepository.save(profile.get());
+        }
+        throw new BadRequestException();
+    }
+
+    public List<User> getListOfUserRequestingNewRole() {
+        return userRepository.getUpgradeRoleStatus(UpgradeRoleStatus.PENDING);
     }
 }
