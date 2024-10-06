@@ -1,8 +1,12 @@
 package com.udemy.elearning.controllers;
 
 import com.udemy.elearning.dto.RegisterValidateRequest;
+import com.udemy.elearning.dto.UpgradingRoleRequest;
+import com.udemy.elearning.models.Profile;
 import com.udemy.elearning.models.User;
 import com.udemy.elearning.services.UserService;
+import jakarta.validation.Valid;
+import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +63,12 @@ public class UserController {
         }else{
             return true;
         }
+    }
+
+    // user uses this api to request to admin to upgrade his/her role to be teacher so that they can login to admin web portal to upload course
+    @PostMapping("/becomingTeacher")
+    public ResponseEntity<Profile> becomingTeacher (@Valid @RequestBody UpgradingRoleRequest upgradingRoleRequest) throws BadRequestException {
+       Profile profile = userService.becomingTeacher(upgradingRoleRequest);
+       return ResponseEntity.ok(profile);
     }
 }

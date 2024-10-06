@@ -1,11 +1,10 @@
 package com.udemy.elearning.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Set;
 
 
 @Data
@@ -31,7 +30,12 @@ public class Profile {
     @Column()
     private String currentWorkPlace;
 
-    @OneToOne(mappedBy = "profile")
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @Column()
+    private UpgradeRoleStatus upgradeRoleStatus;
 
 }

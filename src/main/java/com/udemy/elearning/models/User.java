@@ -1,6 +1,7 @@
 package com.udemy.elearning.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -48,8 +49,8 @@ public class User implements UserDetails {
     @Size(max = 120)
     private String phoneNumber;
 
-    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
     private Profile profile;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
