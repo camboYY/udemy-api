@@ -3,10 +3,11 @@ package com.udemy.elearning.controllers;
 import com.udemy.elearning.dto.LoginRequest;
 import com.udemy.elearning.dto.SignupRequest;
 import com.udemy.elearning.dto.UpgradeRoleRequest;
-import com.udemy.elearning.mapper.JwtResponse;
-import com.udemy.elearning.mapper.UpgradeRoleResponse;
+import com.udemy.elearning.mapper.*;
+import com.udemy.elearning.models.Checkout;
 import com.udemy.elearning.models.User;
 import com.udemy.elearning.services.AuthenticationService;
+import com.udemy.elearning.services.CheckoutService;
 import com.udemy.elearning.services.JwtService;
 import com.udemy.elearning.services.UserService;
 import jakarta.validation.Valid;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/api/admins")
@@ -30,6 +32,8 @@ public class AdminController {
     private AuthenticationService authenticationService;
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private CheckoutService checkoutService;
 
 
     @PostMapping
@@ -68,5 +72,19 @@ public class AdminController {
     public ResponseEntity<List<User>> getListOfUserRequestingNewRole () {
         List<User> userList =  userService.getListOfUserRequestingNewRole();
         return  ResponseEntity.ok(userList);
+    }
+
+    // get list of purchasing courses
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
+    @GetMapping("/getPurchaseList/page/{page}")
+    public ResponseEntity<List<CheckoutAdminResponse>> getAll(@PathVariable(value = "page") int page) {
+        List<Checkout> checkoutList = checkoutService.findAll(page);
+        List<CheckoutAdminResponse> checkoutAdminResponseList = new ArrayList<>();
+        for (Checkout checkout : checkoutList){
+            CourseByResponse courseByResponse  = userService.findById(checkout.getUserId());
+            CheckoutAdminResponse checkoutAdminResponse = new CheckoutAdminResponse(checkout,courseByResponse.getName());
+            checkoutAdminResponseList.add(checkoutAdminResponse);
+        }
+        return ResponseEntity.ok(checkoutAdminResponseList);
     }
 }
