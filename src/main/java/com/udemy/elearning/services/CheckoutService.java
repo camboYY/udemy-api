@@ -14,6 +14,8 @@ import com.udemy.elearning.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -70,8 +72,10 @@ public class CheckoutService {
         return checkoutCreate;
     }
 
-    public List<Checkout> findAll(){
-        return checkoutRepository.findAll();
+    public List<Checkout> findAll(int page){
+        PageRequest pageRequest = PageRequest.of((page-1), 10);
+        Page<Checkout> resultPage = checkoutRepository.findAll(pageRequest);
+        return resultPage.getContent();
     }
 
     public Checkout findById(Long id){

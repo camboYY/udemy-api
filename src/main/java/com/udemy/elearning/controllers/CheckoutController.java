@@ -50,12 +50,6 @@ public class CheckoutController {
         return ResponseEntity.ok(checkout);
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Checkout>> getAll() {
-        List<Checkout> checkoutList = checkoutService.findAll();
-        return ResponseEntity.ok(checkoutList);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Checkout> getById(@PathVariable(value = "id") Long id) {
         Checkout checkout = checkoutService.findById(id);
