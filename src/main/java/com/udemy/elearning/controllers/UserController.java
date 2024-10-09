@@ -42,7 +42,6 @@ public class UserController {
     }
 
     @GetMapping("/list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<List<User>> getUsers(@RequestParam(name = "page",defaultValue = "0") Integer page) {
         int size = 10;
         Pageable pageable = PageRequest.of(page, size);

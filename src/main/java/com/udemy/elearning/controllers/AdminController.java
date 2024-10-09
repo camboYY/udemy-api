@@ -11,11 +11,11 @@ import com.udemy.elearning.services.CheckoutService;
 import com.udemy.elearning.services.JwtService;
 import com.udemy.elearning.services.UserService;
 import jakarta.validation.Valid;
+import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,7 +37,6 @@ public class AdminController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<User> createAdministrator(@RequestBody SignupRequest registerUserDto) {
         logger.info("SignupRequest : {} ",registerUserDto);
         User createdAdmin = userService.createAdministrator(registerUserDto);
@@ -45,21 +44,23 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
-    public ResponseEntity<JwtResponse> adminLogin(@Valid @RequestBody LoginRequest loginUserDto) {
+    public ResponseEntity<JwtResponse> adminLogin(@Valid @RequestBody LoginRequest loginUserDto) throws BadRequestException {
         logger.info("loginUserDto{}", loginUserDto);
 
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);
+       boolean userExist = userService.checkIfUserApplicableRole(authenticatedUser.getUsername());
+        if(userExist) {
+            JwtResponse loginResponse = new JwtResponse(jwtToken, jwtService.getExpirationTime(), authenticatedUser.getId());
 
-        JwtResponse loginResponse = new JwtResponse (jwtToken,jwtService.getExpirationTime(),authenticatedUser.getId());
-
-        return ResponseEntity.ok(loginResponse);
+            return ResponseEntity.ok(loginResponse);
+        } else {
+            throw new BadRequestException("You are not allowed to login");
+        }
     }
 
     // amdin user updates user's role to be teacher/author
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/upgradeRole")
     public ResponseEntity<UpgradeRoleResponse> requestToUpgradeRole (@Valid @RequestBody UpgradeRoleRequest roleRequest) {
         UpgradeRoleResponse upgradeRoleResponse =  userService.upgradeRole(roleRequest);
@@ -67,7 +68,6 @@ public class AdminController {
     }
 
     // get list of  user requesting new role to be author
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @GetMapping("/getListOfUserRequestingNewRole")
     public ResponseEntity<List<User>> getListOfUserRequestingNewRole () {
         List<User> userList =  userService.getListOfUserRequestingNewRole();
@@ -75,7 +75,6 @@ public class AdminController {
     }
 
     // get list of purchasing courses
-    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
     @GetMapping("/getPurchaseList/page/{page}")
     public ResponseEntity<List<CheckoutAdminResponse>> getAll(@PathVariable(value = "page") int page) {
         List<Checkout> checkoutList = checkoutService.findAll(page);

@@ -1,6 +1,5 @@
 package com.udemy.elearning.services;
 
-import com.udemy.elearning.controllers.UserController;
 import com.udemy.elearning.dto.SignupRequest;
 import com.udemy.elearning.dto.UpgradeRoleRequest;
 import com.udemy.elearning.dto.UpgradingRoleRequest;
@@ -21,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,4 +104,10 @@ public class UserService {
     public List<User> getListOfUserRequestingNewRole() {
         return userRepository.getUpgradeRoleStatus(UpgradeRoleStatus.PENDING);
     }
+
+    public boolean checkIfUserApplicableRole (String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.filter(value -> Arrays.asList(ERole.ROLE_TEACHER, ERole.ROLE_SUPER_ADMIN, ERole.ROLE_ADMIN).contains(value.getRole().getName())).isPresent();
+    }
+
 }
