@@ -37,7 +37,7 @@ public class AdminController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     public ResponseEntity<User> createAdministrator(@RequestBody SignupRequest registerUserDto) {
         logger.info("SignupRequest : {} ",registerUserDto);
         User createdAdmin = userService.createAdministrator(registerUserDto);
@@ -45,7 +45,7 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
     public ResponseEntity<JwtResponse> adminLogin(@Valid @RequestBody LoginRequest loginUserDto) {
         logger.info("loginUserDto{}", loginUserDto);
 
@@ -59,7 +59,7 @@ public class AdminController {
     }
 
     // amdin user updates user's role to be teacher/author
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @PostMapping("/upgradeRole")
     public ResponseEntity<UpgradeRoleResponse> requestToUpgradeRole (@Valid @RequestBody UpgradeRoleRequest roleRequest) {
         UpgradeRoleResponse upgradeRoleResponse =  userService.upgradeRole(roleRequest);
@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     // get list of  user requesting new role to be author
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     @GetMapping("/getListOfUserRequestingNewRole")
     public ResponseEntity<List<User>> getListOfUserRequestingNewRole () {
         List<User> userList =  userService.getListOfUserRequestingNewRole();
@@ -75,7 +75,7 @@ public class AdminController {
     }
 
     // get list of purchasing courses
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_TEACHER')")
     @GetMapping("/getPurchaseList/page/{page}")
     public ResponseEntity<List<CheckoutAdminResponse>> getAll(@PathVariable(value = "page") int page) {
         List<Checkout> checkoutList = checkoutService.findAll(page);
