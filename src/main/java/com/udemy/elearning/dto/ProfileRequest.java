@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class ProfileRequest {
 
-    @NotBlank
     @NotNull
     private long userId;
 
