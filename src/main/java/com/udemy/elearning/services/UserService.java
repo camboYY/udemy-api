@@ -1,5 +1,6 @@
 package com.udemy.elearning.services;
 
+import com.udemy.elearning.controllers.UserController;
 import com.udemy.elearning.dto.SignupRequest;
 import com.udemy.elearning.dto.UpgradeRoleRequest;
 import com.udemy.elearning.dto.UpgradingRoleRequest;
@@ -11,6 +12,8 @@ import com.udemy.elearning.repository.ProfileRepository;
 import com.udemy.elearning.repository.RoleRepository;
 import com.udemy.elearning.repository.UserRepository;
 import org.apache.coyote.BadRequestException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,7 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private ProfileRepository profileRepository;
+    private static final Logger logger = LogManager.getLogger(UserService.class);
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -87,11 +91,14 @@ public class UserService {
 
     public Profile becomingTeacher(UpgradingRoleRequest upgradingRoleRequest) throws BadRequestException {
         Optional<Profile> profile = profileRepository.findById(upgradingRoleRequest.getProfileId());
+        logger.info("becomingTeacher :{}",upgradingRoleRequest);
+        logger.info("profile :{}",profile);
+
         if(profile.isPresent()){
             profile.get().setUpgradeRoleStatus(UpgradeRoleStatus.PENDING);
             return profileRepository.save(profile.get());
         }
-        throw new BadRequestException();
+        throw new BadRequestException("bad request");
     }
 
     public List<User> getListOfUserRequestingNewRole() {
