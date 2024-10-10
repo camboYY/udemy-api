@@ -41,6 +41,7 @@ public class UserController {
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TEACHER', 'ROLE_SUPER_ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<User>> getUsers(@RequestParam(name = "page",defaultValue = "0") Integer page) {
         int size = 10;
