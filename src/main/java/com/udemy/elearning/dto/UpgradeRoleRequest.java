@@ -9,11 +9,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UpgradeRoleRequest {
-    @NotBlank
     @NotNull
     private ERole role;
 
-    @NotBlank
     @NotNull
     private  long userId;
 }

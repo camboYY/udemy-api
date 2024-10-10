@@ -10,6 +10,7 @@ import com.udemy.elearning.models.*;
 import com.udemy.elearning.repository.ProfileRepository;
 import com.udemy.elearning.repository.RoleRepository;
 import com.udemy.elearning.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -78,12 +79,16 @@ public class UserService {
 
     }
 
+    @Transactional
     public UpgradeRoleResponse upgradeRole(UpgradeRoleRequest roleRequest) {
         Optional<Role> role = roleRepository.findByName(roleRequest.getRole());
         Optional<User> user =  userRepository.findById(roleRequest.getUserId());
       if(user.isPresent() && role.isPresent()) {
           user.get().setRole(role.get());
         User user1 = userRepository.save(user.get());
+         Profile profile = profileRepository.findByUserId(roleRequest.getUserId());
+         profile.setUpgradeRoleStatus(UpgradeRoleStatus.SUCCESS);
+         profileRepository.save(profile);
         return new UpgradeRoleResponse(user1.getRole().getName());
       }
       throw new UserNotFoundException("user is not found.");
