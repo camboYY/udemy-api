@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 public class ProfileResponse {
 
+    private long profileId;
+
     private String avatar;
 
     private String nickName;
@@ -19,5 +21,6 @@ public class ProfileResponse {
         this.setCurrentWorkPlace(profile.getCurrentWorkPlace());
         this.setNickName(profile.getNickName());
         this.setWorkExperience(profile.getWorkExperience());
+        this.setProfileId(profile.getId());
     }
 }
