@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ProfileResponse {
 
-    private long profileId;
+    private long id;
 
     private String avatar;
 
@@ -21,6 +21,6 @@ public class ProfileResponse {
         this.setCurrentWorkPlace(profile.getCurrentWorkPlace());
         this.setNickName(profile.getNickName());
         this.setWorkExperience(profile.getWorkExperience());
-        this.setProfileId(profile.getId());
+        this.setId(profile.getId());
     }
 }
