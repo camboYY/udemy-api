@@ -27,6 +27,16 @@ public class CourseLessonController {
         this.courseLessonService = courseLessonService;
     }
 
+    @GetMapping("/watchLessonProgressing/{lessonId}")
+    public boolean watchLessonProgressing (@PathVariable(value = "lessonId") Long lessonId) {
+        return courseLessonService.watchLessonProgressing(lessonId);
+    }
+
+    @GetMapping("/getWatchLessonProgressing/{lessonId}")
+    public boolean getWatchLessonProgressing (@PathVariable(value = "lessonId") Long lessonId) {
+        return courseLessonService.getWatchLessonProgressing(lessonId);
+    }
+
     @PostMapping()
     public ResponseEntity<CourseLessonResponse> create(@Valid @RequestBody CourseLessonRequest courseLessonRequest) throws BadRequestException {
         CourseLesson courseLessonCreate = courseLessonService.create(courseLessonRequest);

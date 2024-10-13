@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseLessonService {
@@ -67,4 +68,23 @@ public class CourseLessonService {
         return courseLessons;
     }
 
+    public boolean watchLessonProgressing(Long lessonId) {
+        Optional<CourseLesson> courseLesson = courseLessonRepository.findById(lessonId);
+        if(courseLesson.isPresent()){
+            courseLesson.get().setProgressing(true);
+            courseLessonRepository.save(courseLesson.get());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean getWatchLessonProgressing(Long lessonId) {
+        Optional<CourseLesson> courseLesson = courseLessonRepository.findById(lessonId);
+        if(courseLesson.isPresent()){
+            return courseLesson.get().getProgressing();
+        }
+
+        return false;
+
+    }
 }

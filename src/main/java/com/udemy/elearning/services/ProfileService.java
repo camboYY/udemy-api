@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.Optional;
+
 
 @Service
 public class ProfileService {
@@ -35,6 +37,8 @@ public class ProfileService {
     }
 
     public Profile saveProfile(ProfileRequest profileRequest){
+        Optional<Profile> profileExist = profileRepository.findByUserId(profileRequest.getUserId());
+        if(profileExist.isPresent()){return profileExist.get();}
         Profile profile = new Profile();
         profile.setAvatar(profileRequest.getAvatar());
         profile.setCurrentWorkPlace(profileRequest.getCurrentWorkPlace());
@@ -43,7 +47,7 @@ public class ProfileService {
         profile.setUpgradeRoleStatus(UpgradeRoleStatus.INITIAL);
         User user = userRepository.findById(profileRequest.getUserId()).orElseThrow(()->new RuntimeException("User not found"));
         profile.setUser(user);
-        return  profileRepository.save(profile);
+        return profileRepository.save(profile);
     }
 
     public Profile getProfile(String username) {

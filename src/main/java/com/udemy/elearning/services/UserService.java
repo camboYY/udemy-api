@@ -86,9 +86,11 @@ public class UserService {
       if(user.isPresent() && role.isPresent()) {
           user.get().setRole(role.get());
         User user1 = userRepository.save(user.get());
-         Profile profile = profileRepository.findByUserId(roleRequest.getUserId());
-         profile.setUpgradeRoleStatus(UpgradeRoleStatus.SUCCESS);
-         profileRepository.save(profile);
+         Optional<Profile> profile = profileRepository.findByUserId(roleRequest.getUserId());
+         if(profile.isPresent()){
+             profile.get().setUpgradeRoleStatus(UpgradeRoleStatus.SUCCESS);
+             profileRepository.save(profile.get());
+         }
         return new UpgradeRoleResponse(user1.getRole().getName());
       }
       throw new UserNotFoundException("user is not found.");

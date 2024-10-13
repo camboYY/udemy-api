@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -32,6 +33,8 @@ public class CourseLesson {
     private Integer status;
     @Column()
     private Integer createdBy;
+    @ColumnDefault("false") // false : meaning not have any progress , true yes progressing watch a video
+    private Boolean progressing = false;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
