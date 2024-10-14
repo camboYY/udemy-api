@@ -36,7 +36,8 @@ public class SecurityConfiguration {
             "api/courseLessons/**",
             "api/courseReviews/**",
             "api/users/validate/**",
-            "api/admins/login"
+            "api/admins/login",
+            "/actuator/prometheus"
     };
 
 

@@ -1,0 +1,10 @@
+route:
+  receiver: server-alert-manager
+  repeat_interval: 1m
+receivers:
+  - name: 'server-alert-manager'
+    telegram_configs:
+      - bot_token: '7834478908:AAHv08-6b60tt3CgXKItJjJAhufnLlbiSpc'
+        api_url: https://api.telegram.org
+        chat_id: -1002234562818
+        parse_mode: ''
