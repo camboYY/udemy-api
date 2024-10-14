@@ -46,7 +46,7 @@ public class CourseService {
         course.setCourseBy(courseRequest.getCourseBy());
         course.setCourseInclude(courseRequest.getCourseInclude());
         course.setCourseLearning(courseRequest.getCourseLearning());
-        course.setCourseLearning(courseRequest.getCourseLearning());
+        course.setThumbnailUrl(courseRequest.getThumbnailUrl());
         course.setStatus(courseRequest.getStatus());
         course.setCategoryId(courseRequest.getCategoryId());
         course.setCreatedBy(courseRequest.getCreatedBy());
