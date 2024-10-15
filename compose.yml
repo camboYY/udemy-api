@@ -28,3 +28,17 @@ services:
       - ./docker/alert-manager/config:/etc/prometheus/
     command:
       - '--config.file=/etc/prometheus/alertmanager.yml'
+  db:
+    image: postgres
+    restart: unless-stopped
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - type: bind
+        source: /var/lib/postgres
+        target: /var/lib/postgres

@@ -19,3 +19,9 @@ udemy:
 hibernate:
   temp:
     use_jdbc_metadata_defaults: 'false'
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - prometheus
