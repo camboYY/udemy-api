@@ -64,6 +64,11 @@ public class CourseService {
         return resultPage.getContent();
     }
 
+    public List<Course> searchByStringWithAuthor(String keyword,Long createdBy ,PageRequest pageRequest){
+        Page<Course> resultPage = courseRepository.searchByStringWithAuthor(keyword,createdBy, pageRequest);
+        return resultPage.getContent();
+    }
+
     public Course findById(Long id){
         Course course = courseRepository.findById(id).orElseThrow(()->new NotFoundException("Course not found"));
         logger.info("Course {}", course);

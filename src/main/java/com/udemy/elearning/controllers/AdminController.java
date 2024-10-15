@@ -4,17 +4,14 @@ import com.udemy.elearning.dto.LoginRequest;
 import com.udemy.elearning.dto.SignupRequest;
 import com.udemy.elearning.dto.UpgradeRoleRequest;
 import com.udemy.elearning.mapper.*;
-import com.udemy.elearning.models.Checkout;
-import com.udemy.elearning.models.User;
-import com.udemy.elearning.services.AuthenticationService;
-import com.udemy.elearning.services.CheckoutService;
-import com.udemy.elearning.services.JwtService;
-import com.udemy.elearning.services.UserService;
+import com.udemy.elearning.models.*;
+import com.udemy.elearning.services.*;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +32,12 @@ public class AdminController {
     private JwtService jwtService;
     @Autowired
     private CheckoutService checkoutService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private CourseController courseController;
+    @Autowired
+    private UserController userController;
 
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
@@ -90,5 +93,19 @@ public class AdminController {
             checkoutAdminResponseList.add(checkoutAdminResponse);
         }
         return ResponseEntity.ok(checkoutAdminResponseList);
+    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_SUPER_ADMIN','ROLE_TEACHER')")
+    @GetMapping("/searchByStringWithAuthor/page/{page}")
+    public ResponseEntity<List<CourseResponse>> searchByStringWithAuthor(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+            User user   = userController.authenticatedUser().getBody();
+            PageRequest pageRequest = PageRequest.of(page-1, 10);
+            List<Course> courseList = courseService.searchByStringWithAuthor(keyword,user.getId(), pageRequest);
+            List<CourseResponse> courseResponseList = new ArrayList<>();
+            for (Course course : courseList) {
+                courseResponseList.add(courseController.buildCourseResponse(course));
+            }
+            return ResponseEntity.ok(courseResponseList);
     }
 }
