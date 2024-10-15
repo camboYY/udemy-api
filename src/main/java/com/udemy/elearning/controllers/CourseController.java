@@ -7,6 +7,7 @@ import com.udemy.elearning.mapper.CourseResponse;
 import com.udemy.elearning.mapper.CourseReviewResponse;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
+import jakarta.persistence.Convert;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
@@ -102,7 +103,8 @@ public class CourseController {
             totalRating += reviewResponse.getRating();
             courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
-        double averageRating = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRatingOrig = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRating = Math.round(averageRatingOrig * 100.0) / 100.0;
         return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
     }
     private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {
