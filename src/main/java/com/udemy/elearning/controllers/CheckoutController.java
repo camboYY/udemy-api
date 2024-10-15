@@ -83,7 +83,8 @@ public class CheckoutController {
             totalRating += reviewResponse.getRating();
             courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
-        double averageRating = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRatingOrig = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRating = Math.round(averageRatingOrig * 100.0) / 100.0;
         return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
     }
     private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {

@@ -92,7 +92,7 @@ public class CourseController {
         }
         return ResponseEntity.ok(courseResponseList);
     }
-    public CourseResponse buildCourseResponse(Course course) {
+    private CourseResponse buildCourseResponse(Course course) {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());

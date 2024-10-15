@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,9 +37,13 @@ public class AdminController {
     @Autowired
     private CourseService courseService;
     @Autowired
-    private CourseController courseController;
+    private CategoryService categoryService;
     @Autowired
-    private UserController userController;
+    private CourseTagService courseTagService;
+    @Autowired
+    private CourseLessonService courseLessonService;
+    @Autowired
+    private CourseReviewService courseReviewService;
 
 
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
@@ -99,13 +105,35 @@ public class AdminController {
     public ResponseEntity<List<CourseResponse>> searchByStringWithAuthor(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "page", defaultValue = "1") int page) {
-            User user   = userController.authenticatedUser().getBody();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User currentUser = (User) authentication.getPrincipal();
             PageRequest pageRequest = PageRequest.of(page-1, 10);
-            List<Course> courseList = courseService.searchByStringWithAuthor(keyword,user.getId(), pageRequest);
+            List<Course> courseList = courseService.searchByStringWithAuthor(keyword,currentUser.getId(), pageRequest);
             List<CourseResponse> courseResponseList = new ArrayList<>();
             for (Course course : courseList) {
-                courseResponseList.add(courseController.buildCourseResponse(course));
+                courseResponseList.add(buildCourseResponse(course));
             }
             return ResponseEntity.ok(courseResponseList);
+    }
+    public CourseResponse buildCourseResponse(Course course) {
+        Category category = categoryService.findById(course.getCategoryId());
+        List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
+        List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());
+        List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
+        CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
+        double totalRating = 0.0;
+        List<CourseReviewResponse> courseReviewResponses = new ArrayList<>();
+        for (CourseReview reviewResponse : courseReviewList) {
+            totalRating += reviewResponse.getRating();
+            courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
+        }
+        double averageRatingOrig = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRating = Math.round(averageRatingOrig * 100.0) / 100.0;
+        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
+    }
+    private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {
+        User user = userService.getUserReview(courseReview.getUserId());
+        String username = user.getName();
+        return new CourseReviewResponse(courseReview, username);
     }
 }
