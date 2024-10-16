@@ -73,7 +73,7 @@ public class CheckoutController {
     private CourseResponse buildCourseResponse(Course course, Long userId) {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
+        List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());
         List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
         CourseByResponse courseByResponse = userService.findById(userId);
         logger.info("courseByResponse {}", courseByResponse);
@@ -83,7 +83,8 @@ public class CheckoutController {
             totalRating += reviewResponse.getRating();
             courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
-        double averageRating = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRatingOrig = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
+        double averageRating = Math.round(averageRatingOrig * 100.0) / 100.0;
         return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
     }
     private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {

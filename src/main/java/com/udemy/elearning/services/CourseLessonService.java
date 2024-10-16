@@ -56,8 +56,8 @@ public class CourseLessonService {
         return resultPage.getContent();
     }
 
-    public List<CourseLesson> findByCourseId(Long courseId){
-        List<CourseLesson> courseLessonsList = courseLessonRepository.findByCourseId(courseId);
+    public List<CourseLesson> findByCourseIdSorted(Long courseId){
+        List<CourseLesson> courseLessonsList = courseLessonRepository.findByCourseIdSorted(courseId);
         logger.info("CourseLesson {}", courseLessonsList);
         return courseLessonsList;
     }

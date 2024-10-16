@@ -16,4 +16,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c FROM Course c LEFT JOIN CourseTags ct ON c.id = ct.courseId WHERE LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(ct.title) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Course> searchByString(String keyword, PageRequest pageRequest);
 
+    @Query("SELECT c FROM Course c LEFT JOIN CourseTags ct ON c.id = ct.courseId WHERE (LOWER(c.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(ct.title) LIKE LOWER(CONCAT('%', :keyword, '%'))) and c.createdBy = :createdBy")
+    Page<Course> searchByStringWithAuthor(String keyword,Long createdBy, PageRequest pageRequest);
+
 }

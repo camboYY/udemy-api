@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class CourseController {
     private CourseResponse buildCourseResponse(Course course) {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
-        List<CourseLesson> courseLessonList = courseLessonService.findByCourseId(course.getId());
+        List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());
         List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
         CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
         double totalRating = 0.0;

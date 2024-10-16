@@ -46,7 +46,7 @@ public class CourseLessonController {
 
     @GetMapping("/getByCourseId/{courseId}")
     public ResponseEntity<List<CourseLesson>> getByCourseId(@PathVariable(value = "courseId") Long courseId) {
-        List<CourseLesson> courseLessonsList = courseLessonService.findByCourseId(courseId);
+        List<CourseLesson> courseLessonsList = courseLessonService.findByCourseIdSorted(courseId);
         return ResponseEntity.ok(courseLessonsList);
     }
 
