@@ -72,7 +72,7 @@ public class CheckoutController {
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());
         List<CourseReview> courseReviewList = courseReviewService.findByCourseId(course.getId());
-        CourseByResponse courseByResponse = userService.findById(userId);
+        CourseByResponse courseByResponse = userService.findById(Long.valueOf(course.getCourseBy()));
         logger.info("courseByResponse {}", courseByResponse);
         double totalRating = 0.0;
         List<CourseReviewResponse> courseReviewResponses = new ArrayList<>();
