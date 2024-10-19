@@ -62,6 +62,12 @@ public class CourseLessonService {
         return courseLessonsList;
     }
 
+    public Integer findByCourseIdWithUserId(Long lessonId,Long userId){
+        Integer countNum = courseLessonRepository.findByCourseIdWithUserId(lessonId,userId);
+        logger.info("countNum {}", countNum);
+        return countNum;
+    }
+
     public CourseLesson findById(Long id){
         CourseLesson courseLessons = courseLessonRepository.findById(id).orElseThrow(()->new NotFoundException("Course not found"));
         logger.info("CourseLesson {}", courseLessons);

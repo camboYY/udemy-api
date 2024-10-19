@@ -14,4 +14,7 @@ public interface CourseLessonRepository extends JpaRepository<CourseLesson, Long
 
     @Query("SELECT c FROM CourseLesson c WHERE c.courseId = :courseId ORDER BY c.id DESC")
     List<CourseLesson> findByCourseIdSorted(@Param("courseId") Long courseId);
+
+    @Query("SELECT COUNT(u) FROM UserCompleteLesson u WHERE u.lessonId = :lessonId and u.userId = :userId")
+    Integer findByCourseIdWithUserId(@Param("lessonId") Long lessonId, @Param("userId") Long userId);
 }

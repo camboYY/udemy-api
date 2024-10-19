@@ -1,10 +1,7 @@
 package com.udemy.elearning.controllers;
 
 import com.udemy.elearning.dto.CheckoutRequest;
-import com.udemy.elearning.mapper.CheckoutResponse;
-import com.udemy.elearning.mapper.CourseByResponse;
-import com.udemy.elearning.mapper.CourseResponse;
-import com.udemy.elearning.mapper.CourseReviewResponse;
+import com.udemy.elearning.mapper.*;
 import com.udemy.elearning.models.*;
 import com.udemy.elearning.services.*;
 import lombok.extern.slf4j.Slf4j;
@@ -57,9 +54,9 @@ public class CheckoutController {
     }
 
     @GetMapping("/myOrderList/{userId}")
-    public ResponseEntity<List<CourseResponse>> myOrderList(@PathVariable(value = "userId") Long userId) {
+    public ResponseEntity<List<CourseAfterCheckoutResponse>> myOrderList(@PathVariable(value = "userId") Long userId) {
         List<Checkout> checkoutList = checkoutService.myOrderList(userId);
-        List<CourseResponse> courseResponseList = new ArrayList<>();
+        List<CourseAfterCheckoutResponse> courseResponseList = new ArrayList<>();
         for (Checkout checkout : checkoutList) {
             List<CheckoutCourse> courseList = checkoutCourseService.findByCheckoutId(checkout.getId());
             for (CheckoutCourse checkoutCourse : courseList) {
@@ -70,7 +67,7 @@ public class CheckoutController {
         return ResponseEntity.ok(courseResponseList);
     }
 
-    private CourseResponse buildCourseResponse(Course course, Long userId) {
+    private CourseAfterCheckoutResponse buildCourseResponse(Course course, Long userId) {
         Category category = categoryService.findById(course.getCategoryId());
         List<CourseTags> courseTagsList = courseTagService.findByCourseId(course.getId());
         List<CourseLesson> courseLessonList = courseLessonService.findByCourseIdSorted(course.getId());
@@ -83,9 +80,16 @@ public class CheckoutController {
             totalRating += reviewResponse.getRating();
             courseReviewResponses.add(buildCourseReviewResponse(reviewResponse));
         }
+        List<CourseLessonWithStatusResponse> courseLessonWithStatusResponseList = new ArrayList<>();
+        for (CourseLesson courseLessonData : courseLessonList) {
+            Integer countCompleted = courseLessonService.findByCourseIdWithUserId(courseLessonData.getId(),userId);
+            boolean b = countCompleted > 0;
+            CourseLessonWithStatusResponse courseLessonWithStatusResponse = new CourseLessonWithStatusResponse(courseLessonData, b);
+            courseLessonWithStatusResponseList.add(courseLessonWithStatusResponse);
+        }
         double averageRatingOrig = courseReviewList.isEmpty() ? 0.0 : totalRating / courseReviewList.size();
         double averageRating = Math.round(averageRatingOrig * 100.0) / 100.0;
-        return new CourseResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonList, courseReviewResponses);
+        return new CourseAfterCheckoutResponse(course, category, courseByResponse, averageRating, courseTagsList, courseLessonWithStatusResponseList, courseReviewResponses);
     }
     private CourseReviewResponse buildCourseReviewResponse(CourseReview courseReview) {
         User user = userService.getUserReview(courseReview.getUserId());

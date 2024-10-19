@@ -34,6 +34,7 @@ public class SecurityConfiguration {
             "api/courses/**",
             "api/courseTags/**",
             "api/courseLessons/**",
+            "api/userCompleteLesson/**",
             "api/courseReviews/**",
             "api/users/validate/**",
             "api/admins/login",
