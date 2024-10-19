@@ -2,12 +2,16 @@ package com.udemy.elearning.controllers;
 
 import com.udemy.elearning.dto.CourseLessonRequest;
 import com.udemy.elearning.dto.CourseTagRequest;
+import com.udemy.elearning.dto.UserCompleteLessonRequest;
 import com.udemy.elearning.mapper.CourseLessonResponse;
 import com.udemy.elearning.mapper.CourseTagResponse;
+import com.udemy.elearning.mapper.UserCompleteLessonResponse;
 import com.udemy.elearning.models.CourseLesson;
 import com.udemy.elearning.models.CourseTags;
+import com.udemy.elearning.models.UserCompleteLesson;
 import com.udemy.elearning.services.CourseLessonService;
 import com.udemy.elearning.services.CourseTagService;
+import com.udemy.elearning.services.UserCompleteLessonService;
 import jakarta.validation.Valid;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
